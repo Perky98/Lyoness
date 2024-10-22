@@ -111,16 +111,15 @@ function startMemorizationPhase()
         }
     }, 1000);
 }
-
 function startAlignmentTimer() 
 {
-    alignmentTimer = 15; // reset time
+    alignmentTimer = 15; 
     gameActive = true; 
     updateTimerDisplay(alignmentTimer);
-    statusDisplay.textContent = 'Usporiadaj pastelky';
+    statusDisplay.textContent = 'Usporiadaj pastelky'; 
 
-    clearInterval(alignmentInterval);
-    
+    clearInterval(alignmentInterval); 
+
     alignmentInterval = setInterval(() => {
         alignmentTimer--;
         updateTimerDisplay(alignmentTimer);
@@ -128,14 +127,15 @@ function startAlignmentTimer()
         if (alignmentTimer <= 0)
         {
             clearInterval(alignmentInterval);
-            statusDisplay.textContent = 'Cas uplinul';
+            statusDisplay.textContent = 'Cas uplinul'; 
             gameActive = false; 
-            setTimeout(resetGame, 2000); // reset after 2s
+            setTimeout(resetGame, 2000);
         }
     }, 1000);
 
-    enableDrag();
+    enableDrag(); 
 }
+
 function shuffleCrayons() 
 {
     const crayons = document.querySelectorAll('.crayon');
@@ -170,7 +170,10 @@ function enableDrag()
     
     crayons.forEach(crayon => {
         crayon.style.position = 'absolute'; 
-        crayon.addEventListener('mousedown', dragStart);
+        crayon.style.cursor = 'pointer';
+
+        crayon.removeEventListener('mousedown', dragStart);
+        crayon.addEventListener('mousedown', dragStart); 
     });
 }
 
@@ -178,6 +181,140 @@ let selectedCrayon = null;
 let offsetX = 0;
 let offsetY = 0;
 
+let prevPosition = { x: 0, y: 0 }; 
+
+function dragMove(e) 
+{
+    if (!selectedCrayon) return; 
+    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
+    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
+}
+function dragStart(e) 
+{
+    if (!gameActive) return; 
+
+    selectedCrayon = e.target; 
+    prevPosition = { 
+        x: parseFloat(selectedCrayon.style.left), 
+        y: parseFloat(selectedCrayon.style.top) 
+    }; 
+
+    offsetX = e.clientX - parseInt(selectedCrayon.style.left); 
+    offsetY = e.clientY - parseInt(selectedCrayon.style.top);
+
+    document.addEventListener('mousemove', dragMove); 
+    document.addEventListener('mouseup', dragEnd);
+}
+
+function dragEnd() 
+{
+    if (!selectedCrayon) return;
+
+    document.removeEventListener('mousemove', dragMove);
+    document.removeEventListener('mouseup', dragEnd);
+
+    checkCrayonPosition(selectedCrayon); 
+    selectedCrayon = null;
+}
+
+function checkCrayonPosition(crayon) 
+{
+    const crayonX = parseFloat(crayon.style.left);
+    const crayonY = parseFloat(crayon.style.top);
+    let placedOnHolder = false;
+    let holderOccupied = false;
+
+    holders.forEach((holder, index) => {
+        const holderX = holder.x;
+        const holderY = holder.y;
+
+        // Check if crayon is being placed near a holder
+        if (Math.abs(crayonX - holderX) < 50 && Math.abs(crayonY - holderY) < 50) 
+        {
+            // Check if the holder already contains a crayon
+            const crayons = document.querySelectorAll('.crayon');
+            crayons.forEach(otherCrayon =>
+                 {
+                if (otherCrayon !== crayon) 
+                    {
+                    const otherCrayonX = parseFloat(otherCrayon.style.left);
+                    const otherCrayonY = parseFloat(otherCrayon.style.top);
+                    if (Math.abs(otherCrayonX - holderX) < 10 && Math.abs(otherCrayonY - holderY) < 10) holderOccupied = true;
+                }
+            });
+
+            if (!holderOccupied) 
+                {
+                //const holderWidth = 100; 
+               // const holderHeight = 150; 
+                //const crayonWidth = 50; 
+                //const crayonHeight = 80; 
+
+                crayon.style.left = `${holderX + (57 - 44) / 2}px`;
+                crayon.style.top = `${holderY + (107 - 94) / 2}px`; 
+
+                placedOnHolder = true; 
+            }
+        }
+    });
+
+    if (holderOccupied) 
+        {
+        crayon.style.left = `${prevPosition.x}px`;
+        crayon.style.top = `${prevPosition.y}px`;
+    }
+
+    if (placedOnHolder && !holderOccupied && isLevelCompleted()) 
+        {
+        gameActive = false;
+        clearInterval(alignmentInterval); 
+        statusDisplay.textContent = 'Spravne';
+        setTimeout(nextLevel, 2000); 
+    } else if (!holderOccupied) {
+        statusDisplay.textContent = 'Usporiadaj pastelky';
+    }
+}
+//----------------------------------------------------------------------------------------------------------------
+// pastelky ci su usporiadane ok
+function isLevelCompleted() 
+{
+    return origPos.every((pos, index) => {
+        const crayon = document.querySelectorAll('.crayon')[index];
+        const crayonX = parseFloat(crayon.style.left);
+        const crayonY = parseFloat(crayon.style.top);
+        return Math.abs(crayonX - pos.x) < 10 && Math.abs(crayonY - pos.y) < 10;
+    });
+}
+function nextLevel() 
+{
+    LVL++;
+    crayonCount = Math.min(7, crayonCount + 1); // Max crayons = 7
+    updateLVLdisplay();
+    spawnPastelky(); // Spawn new crayons for next lvl
+}
+
+function resetGame() 
+{
+    LVL = 1;
+    crayonCount = 3; // min 3 pastelky
+    clearInterval(memorizationInterval);
+    clearInterval(alignmentInterval);
+    gameActive = false; 
+    updateLVLdisplay();
+    updateTimerDisplay(0);
+    statusDisplay.textContent = 'restatuj hru';
+    spawnPastelky(); // Restart game
+}
+
+function getDistinctColors(count) {
+    const colors = ['#FF0000', '#FFFF00', '#FFA500', '#008000', '#0000FF', '#FFC0CB', '#8B4513']; // Red yellow orange green blue pinkbrown
+    return colors.slice(0, count); 
+}
+
+spawnPastelky(); // Staart
+
+
+/*
 function dragStart(e) 
 {
     if (!gameActive) return; //no draggingd when mem phase
@@ -236,49 +373,11 @@ function checkCrayonPosition(crayon) // check if crayon on correctt holder------
     } else 
     {
         statusDisplay.textContent = 'Usporiadaj pastelky';
-    }
-}
+    }*/
 
 
-//----------------------------------------------------------------------------------------------------------------
 
-// pastelky ci su usporiadane ok
-function isLevelCompleted() 
-{
-    return origPos.every((pos, index) => {
-        const crayon = document.querySelectorAll('.crayon')[index];
-        const crayonX = parseFloat(crayon.style.left);
-        const crayonY = parseFloat(crayon.style.top);
-        return Math.abs(crayonX - pos.x) < 10 && Math.abs(crayonY - pos.y) < 10;
-    });
-}
-function nextLevel() 
-{
-    LVL++;
-    crayonCount = Math.min(7, crayonCount + 1); // Max crayons = 7
-    updateLVLdisplay();
-    spawnPastelky(); // Spawn new crayons for next lvl
-}
 
-function resetGame() 
-{
-    LVL = 1;
-    crayonCount = 3; // min 3 pastelky
-    clearInterval(memorizationInterval);
-    clearInterval(alignmentInterval);
-    gameActive = false; 
-    updateLVLdisplay();
-    updateTimerDisplay(0);
-    statusDisplay.textContent = 'restatuj hru';
-    spawnPastelky(); // Restart game
-}
-
-function getDistinctColors(count) {
-    const colors = ['#FF0000', '#FFFF00', '#FFA500', '#008000', '#0000FF', '#FFC0CB', '#8B4513']; // Red yellow orange green blue pinkbrown
-    return colors.slice(0, count); 
-}
-
-spawnPastelky(); // Staart
 
 
 /*
