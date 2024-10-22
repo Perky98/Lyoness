@@ -7,13 +7,9 @@ let attempt = 0;
 generateNumber()
 
 function generateNumber() {
- previousNumber = currentNumber;
- currentNumber = Math.floor(Math
-   .random() * 4) +
-  1; 
-  // Generuje čísla medzi 1 a 4
- document.getElementById('number')
-  .innerText = currentNumber;
+  previousNumber = currentNumber;
+  currentNumber = (Math.random() * 4 | 0) + 1; 
+  numberDisplay.innerText = currentNumber;
 }
 
 function checkSame(isSame) {
