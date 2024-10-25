@@ -3,18 +3,14 @@ let playerSequence = [];
 let level = 1;
 let score = 0;
 let clickable = false;
-let timer; 
-let timeLeft = 60; 
-let isPaused = false; 
+let isPaused = false;
 
 const gridContainer = document.getElementById('grid-container');
 const levelText = document.getElementById('level');
 const scoreText = document.getElementById('score');
-const timerText = document.getElementById('timer'); 
 const restartBtn = document.getElementById('restart-btn');
 const pauseBtn = document.getElementById('pause-btn');
-
-
+const gameOverMessage = document.getElementById('game-over-message'); 
 for (let i = 0; i < 16; i++) {
     const square = document.createElement('div');
     square.classList.add('grid-item');
@@ -22,35 +18,20 @@ for (let i = 0; i < 16; i++) {
     square.addEventListener('click', handlePlayerClick);
     gridContainer.appendChild(square);
 }
-
-
 startGame();
-
-
 restartBtn.addEventListener('click', restartGame);
-
-
 pauseBtn.addEventListener('click', togglePause);
-
 function startGame() {
-    if (timeLeft <= 0) {
-        alert('The game is over. Please restart.');
-        return;
-    }
     resetGame();
     nextLevel();
-    startTimer(); 
 }
-
 function resetGame() {
     sequence = [];
     playerSequence = [];
     level = 1;
     score = 0;
     clickable = false;
-    timeLeft = 60; 
-    clearInterval(timer); 
-    timerText.innerText = timeLeft;
+    gameOverMessage.style.display = "none"; // Hide game-over message
     clearGrid();
     updateScoreAndLevel();
 }
@@ -58,7 +39,7 @@ function resetGame() {
 function nextLevel() {
     playerSequence = [];
     clickable = false;
-    sequence.push(Math.floor(Math.random() * 16)); 
+    sequence.push(Math.floor(Math.random() * 16)); // Random tile
     flashSequence();
 }
 
@@ -72,7 +53,7 @@ function flashSequence() {
     });
 
     setTimeout(() => {
-        clickable = true; 
+        clickable = true; // Allow player to click after sequence is shown
     }, delay * (sequence.length + 1));
 }
 
@@ -85,25 +66,18 @@ function flashTile(tileId) {
 }
 
 function handlePlayerClick(e) {
-    if (!clickable || isPaused) return; 
+    if (!clickable || isPaused) return;
 
     const tileId = parseInt(e.target.getAttribute('data-id'));
     playerSequence.push(tileId);
-
-   
     e.target.classList.add('clicked');
     setTimeout(() => {
         e.target.classList.remove('clicked');
     }, 300);
-
-    
     if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
-        alert('Game Over! You reached level ' + level + ' with a score of ' + score);
-        restartGame();
+        displayGameOver(); 
         return;
     }
-
-    
     if (playerSequence.length === sequence.length) {
         score += 10 * level;
         level++;
@@ -123,34 +97,16 @@ function clearGrid() {
     });
 }
 
-
-function startTimer() {
-    clearInterval(timer); 
-    timer = setInterval(() => {
-        if (!isPaused) {
-            timeLeft--;
-            timerText.innerText = timeLeft;
-
-            if (timeLeft <= 0) {
-                alert('Time is up! Game Over. You reached level ' + level + ' with a score of ' + score);
-                clearInterval(timer);
-                restartGame();
-            }
-        }
-    }, 1000); 
-}
-
 function togglePause() {
-    if (isPaused) {
-        isPaused = false;
-        pauseBtn.innerText = "Pause";
-    } else {
-        isPaused = true;
-        pauseBtn.innerText = "Resume";
-    }
+    isPaused = !isPaused;
+    pauseBtn.innerText = isPaused ? "Resume" : "Pause";
 }
 
 function restartGame() {
     resetGame();
     startGame();
+}
+function displayGameOver() {
+    gameOverMessage.innerText = `Game Over! You reached level ${level} with a score of ${score}`;
+    gameOverMessage.style.display = "block";
 }
