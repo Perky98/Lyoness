@@ -7,11 +7,9 @@ body {
     height: 100vh;
     background-color: #f7f7f7;
 }
-
 h1 {
     margin-bottom: 20px;
 }
-
 #grid-container {
     display: grid;
     grid-template-columns: repeat(4, 100px);
@@ -19,7 +17,6 @@ h1 {
     gap: 10px;
     margin-bottom: 20px;
 }
-
 .grid-item {
     width: 100px;
     height: 100px;
@@ -31,15 +28,12 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
 .grid-item.active {
     background-color: #ffeb3b;
 }
-
 .grid-item.clicked {
     background-color: #2196f3;
 }
-
 button {
     padding: 10px 20px;
     margin: 5px;
@@ -50,14 +44,26 @@ button {
     color: white;
     transition: background-color 0.3s ease;
 }
-
 button:hover {
     background-color: #45a049;
 }
-
 .info {
     margin-bottom: 20px;
     display: flex;
     justify-content: space-around;
     width: 300px;
+}
+.game-over-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ff3b3b;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 10;
 }
