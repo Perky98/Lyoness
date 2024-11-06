@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Moving Game with Background and Click Interaction</title>
+    <style>
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        canvas { background: #f0f0f0; border: 2px solid #333; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+    <script>
+        // Select the canvas and set up the context
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Load the background image
+        const backgroundImage = new Image();
+        backgroundImage.src = "TTRmapa1.png"; // Replace with your background image URL
+
+        // Load the sprite image
+        const sprite = new Image();
+        sprite.src = "panak1.png"; // Replace with your sprite image URL
+
+        // Load the arrow image
+        const arrow = new Image();
+        arrow.src = "arrow.png"; // Replace with your arrow image URL
+
+        // Initial position of the sprite and initial target
+        let spriteX = 95;
+        let spriteY = 85;
+        let initialTargetX = 240;
+        let initialTargetY = 180;
+
+        // ---------------------------1 odbocka KU KOSU
+        const secondTargetX = 477;   
+        const secondTargetY = 180;
+        // ---------------------------1 rovna 
+        const clickTargetX = 550;
+        const clickTargetY = 400;
+        // -----------------------------------------------------------
+
+
+        // Current target position variables
+        let targetX = initialTargetX;
+        let targetY = initialTargetY;
+
+        // Speed of the sprite
+        const speed = 1;
+
+        // Variables for direction
+        let unitX, unitY;
+
+        // Flags to track visibility of the arrows
+        let showFirstArrow = true;
+        let showSecondArrow = false;
+
+        // Function to update direction to the target
+        function updateDirection() {
+            const dx = targetX - spriteX;
+            const dy = targetY - spriteY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            unitX = dx / distance;
+            unitY = dy / distance;
+        }
+
+        // Initialize direction
+        updateDirection();
+
+        // Animation loop
+        function gameLoop() {
+            // Draw the background
+            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+            // Draw the sprite at its current position
+            ctx.drawImage(sprite, spriteX, spriteY, 30, 50);
+
+            // Move the sprite towards the target position
+            if (Math.abs(spriteX - targetX) > 1 || Math.abs(spriteY - targetY) > 1) {
+                spriteX += unitX * speed;
+                spriteY += unitY * speed;
+            } else {
+                // Check if the sprite reached the first target, then set the next target
+                if (targetX === initialTargetX && targetY === initialTargetY) {
+                    targetX = secondTargetX;
+                    targetY = secondTargetY;
+                    updateDirection(); // Update direction to move towards the second target
+                }
+            }
+
+            // Draw the transparent green circle button
+            drawCircleButton();
+
+            // Draw arrows if visible
+            if (showFirstArrow) {
+                ctx.drawImage(arrow, 250, 200, 40, 40); // Position of first arrow
+            }
+
+            if (showSecondArrow) {
+                // Save the current context state
+                ctx.save();
+
+                // Rotate the canvas 90 degrees to make the arrow point downward
+                ctx.translate(266 , 233 ); // Move to arrow center
+                ctx.rotate(45); // Rotate 90 degrees (down)
+                ctx.drawImage(arrow, -20, -20, 40, 40); // Draw the arrow
+                ctx.restore(); // Restore the canvas context to the previous state
+            }
+
+            // Request the next frame
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Function to draw the circular button
+        function drawCircleButton() {
+            const buttonX = 250; // X position of the button
+            const buttonY = 220; // Y position of the button
+            const buttonRadius = 55; // Radius of the button
+
+            // Draw a transparent green circle
+            ctx.fillStyle = "rgba(22, 188, 22, 0.3)"; // Green with 50% transparency
+            ctx.beginPath();
+            ctx.arc(buttonX, buttonY, buttonRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Event listener for clicks on the canvas
+        canvas.addEventListener("click", (event) => {
+            // Get the click position
+            const rect = canvas.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+
+            // Check if the click is within the circle button
+            const buttonX = 250; // X position of the button
+            const buttonY = 220; // Y position of the button
+            const buttonRadius = 55; // Radius of the button
+            const distanceToButton = Math.sqrt((clickX - buttonX) ** 2 + (clickY - buttonY) ** 2);
+
+            if (distanceToButton < buttonRadius) {
+                // Toggle the visibility of the arrows
+                if (showFirstArrow) {
+                    showFirstArrow = false;
+                    showSecondArrow = true; // Show second arrow
+                } else {
+                    showFirstArrow = true; // Show first arrow
+                    showSecondArrow = false;
+                }
+
+                // Check if the sprite is between the initial position and the first target position
+                const inRange = spriteX <= initialTargetX && spriteY <= initialTargetY;
+
+                if (inRange) {
+                    // Change the target to (300, 500)
+                    targetX = clickTargetX;
+                    targetY = clickTargetY;
+                    updateDirection(); // Update direction for the new target
+                }
+            }
+        });
+
+        // Start the game loop once both images have loaded
+        backgroundImage.onload = () => {
+            sprite.onload = () => {
+                arrow.onload = () => {
+                    gameLoop();
+                };
+            };
+        };
+    </script>
+</body>
+</html>
