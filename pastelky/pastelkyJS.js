@@ -5,28 +5,27 @@ const quitButton = document.getElementById('quit-button');
 
 
 startButton.addEventListener('click', () => {
-    titleScreen.style.display = 'none'; // Hide title screen
-    gameContainer.style.display = 'block'; // Show game container
-    spawnPastelky(); // Start the game
+    titleScreen.style.display = 'none'; 
+    gameContainer.style.display = 'block'; 
+    spawnPastelky();
 });
 
-// Function to show the game screen and hide the title screen
 function startGame() {
     titleScreen.style.display = 'none';
     gameContainer.style.display = 'block';
-    resetGame(); // Start the game at level 1
+    resetGame(); 
 }
 
-// Function to quit the game and return to the title screen
+
 function quitGame() {
     titleScreen.style.display = 'flex';
     gameContainer.style.display = 'none';
     clearInterval(memorizationInterval);
     clearInterval(alignmentInterval);
-    statusDisplay.textContent = ''; // Clear game status text
+    statusDisplay.textContent = ''; 
 }
 
-// Event listeners for start and quit buttons
+
 startButton.addEventListener('click', startGame);
 
 const levelDisplay = document.getElementById('level');
