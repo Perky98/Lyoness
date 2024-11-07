@@ -1,4 +1,34 @@
 const gameContainer = document.getElementById('game-container');
+const titleScreen = document.getElementById('title-screen');
+const startButton = document.getElementById('start-button');
+const quitButton = document.getElementById('quit-button');
+
+
+startButton.addEventListener('click', () => {
+    titleScreen.style.display = 'none'; // Hide title screen
+    gameContainer.style.display = 'block'; // Show game container
+    spawnPastelky(); // Start the game
+});
+
+// Function to show the game screen and hide the title screen
+function startGame() {
+    titleScreen.style.display = 'none';
+    gameContainer.style.display = 'block';
+    resetGame(); // Start the game at level 1
+}
+
+// Function to quit the game and return to the title screen
+function quitGame() {
+    titleScreen.style.display = 'flex';
+    gameContainer.style.display = 'none';
+    clearInterval(memorizationInterval);
+    clearInterval(alignmentInterval);
+    statusDisplay.textContent = ''; // Clear game status text
+}
+
+// Event listeners for start and quit buttons
+startButton.addEventListener('click', startGame);
+
 const levelDisplay = document.getElementById('level');
 const statusDisplay = document.getElementById('status');
 const resetButton = document.createElement('button');
@@ -18,6 +48,19 @@ resetButton.style.borderRadius = '11px';
 gameContainer.appendChild(resetButton);
 
 resetButton.addEventListener('click', resetGame);
+
+quitButton.textContent = "Quit Game";
+quitButton.style.position = 'absolute';
+quitButton.style.bottom = '440px';
+quitButton.style.backgroundColor = 'orange';
+quitButton.style.right = '10px';
+quitButton.style.fontWeight = 'bold';
+quitButton.style.padding = '13px 13px';
+quitButton.style.fontSize = '13px';
+quitButton.style.borderRadius = '13px';
+gameContainer.appendChild(quitButton);
+
+quitButton.addEventListener('click', quitGame);
 
 let crayonCount = 3;
 let origPos = [];
@@ -40,8 +83,7 @@ function updateLVLdisplay() {
    // progressFill.style.width = `${(timer / maxTime) * 100}%`;
 //}
 function updateProgressBar(remainingTime, maxTime) {
-    // Calculate the width percentage based on remaining time
-    const percentage = Math.max((remainingTime / maxTime) * 100, 0); // Ensure it doesn't go below 0
+    const percentage = Math.max((remainingTime / maxTime) * 100, 0); 
     progressFill.style.width = `${percentage}%`;
 }
 
@@ -53,16 +95,16 @@ function spawnPastelky() {
     gameContainer.appendChild(levelDisplay);
     gameContainer.appendChild(statusDisplay);
     gameContainer.appendChild(resetButton);
+    gameContainer.appendChild(quitButton);
     gameContainer.appendChild(progressBar);
 
     origPos = [];
     holders = [];
 
-    // Placeholder positions for crayon holders
     for (let i = 0; i < crayonCount; i++) {
-        const holder = document.createElement('img'); // Create an img element for the holder
+        const holder = document.createElement('img'); 
         holder.classList.add('holder');
-        holder.src = 'c0.png'; // Set to the path of your holder image
+        holder.src = 'c0.png'; 
 
         const posX = 50 + (i * 100);
         const posY = gameContainer.clientHeight / 2 - 50;
@@ -95,10 +137,11 @@ function spawnPastelky() {
     randomizedPositions.sort(() => Math.random() - 0.5);
 
     for (let i = 0; i < crayonCount; i++) {
-        const crayon = document.createElement('img'); // Create an img element for the crayon
+        const crayon = document.createElement('img');
         crayon.classList.add('crayon');
-        crayon.src = `crayon${i + 1}.png`; // Set the source to your crayon images (replace with actual path)
+        crayon.src = `crayon${i + 1}.png`; 
         crayon.style.position = 'absolute';
+        crayon.draggable = false; //ez
 
         const holderX = randomizedPositions[i].x;
         const holderY = randomizedPositions[i].y;
@@ -118,7 +161,7 @@ function spawnPastelky() {
 }
 
 window.addEventListener('resize', () => {
-    spawnPastelky(); // Re-render crayons and holders based on new dimensions
+    spawnPastelky(); 
 });
 
 
@@ -176,29 +219,26 @@ window.addEventListener('resize', () => {
 }*/
 
 function startMemorizationPhase() {
-    memorizationTimer = 5; // Duration in seconds
+    memorizationTimer = 5; 
     gameActive = false;
-    updateProgressBar(memorizationTimer, memorizationTimer); // Start at 100%
+    updateProgressBar(memorizationTimer, memorizationTimer); 
     statusDisplay.textContent = 'Zapamataj si usporiadanie pasteliek!';
 
     clearInterval(memorizationInterval);
-    
-    // Change the interval to 100 ms
     memorizationInterval = setInterval(() => {
-        memorizationTimer -= 0.1; // Decrease timer by 0.1 seconds
-        console.log(`Timer: ${memorizationTimer.toFixed(1)}`); // Log with one decimal place
+        memorizationTimer -= 0.1; 
+        console.log(`Timer: ${memorizationTimer.toFixed(1)}`); 
 
-        // Update the progress bar based on the remaining time
-        updateProgressBar(memorizationTimer, 5); // 5 is the max timer value
+        updateProgressBar(memorizationTimer, 5); 
 
         if (memorizationTimer <= 0) {
             clearInterval(memorizationInterval);
-            memorizationTimer = 0; // Ensure timer doesn't go negative
-            updateProgressBar(memorizationTimer, 5); // Final update to 0%
+            memorizationTimer = 0; 
+            updateProgressBar(memorizationTimer, 5);
             shuffleCrayons();
             startAlignmentTimer();
         }
-    }, 100); // Update every 100 milliseconds
+    }, 100); 
 }
 
 function startAlignmentTimer() {
@@ -215,7 +255,7 @@ function startAlignmentTimer() {
 
         if (alignmentTimer <= 0) {
             clearInterval(alignmentInterval);
-            statusDisplay.textContent = 'Cas uplinul';
+            statusDisplay.textContent = 'Cas uplynul';
             gameActive = false;
             setTimeout(resetGame, 2000);
         }
@@ -250,7 +290,7 @@ function positionsAreEqual(positions1, positions2) {
 
 function enableDrag() {
     const crayons = document.querySelectorAll('.crayon');
-    
+
     crayons.forEach(crayon => {
         crayon.style.position = 'absolute';
         crayon.style.cursor = 'pointer';
@@ -264,8 +304,38 @@ let selectedCrayon = null;
 let offsetX = 0;
 let offsetY = 0;
 
-let prevPosition = { x: 0, y: 0 };
+function dragStart(e) {
+   
+    if (!gameActive || e.button !== 0) return;
 
+    selectedCrayon = e.target;
+    offsetX = e.clientX - parseFloat(selectedCrayon.style.left);
+    offsetY = e.clientY - parseFloat(selectedCrayon.style.top);
+
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+}
+
+function dragMove(e) {
+    if (!selectedCrayon) return;
+
+    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
+    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
+}
+
+function dragEnd() {
+    if (!selectedCrayon) return;
+
+    document.removeEventListener('mousemove', dragMove);
+    document.removeEventListener('mouseup', dragEnd);
+
+    checkCrayonPosition(selectedCrayon);
+
+    selectedCrayon = null;
+}
+
+
+/*
 function dragMove(e) {
     if (!selectedCrayon) return;
     selectedCrayon.style.left = `${e.clientX - offsetX}px`;
@@ -296,7 +366,7 @@ function dragEnd() {
 
     checkCrayonPosition(selectedCrayon);
     selectedCrayon = null;
-}
+}*/
 
 function checkCrayonPosition(crayon) {
     const crayonX = parseFloat(crayon.style.left);
