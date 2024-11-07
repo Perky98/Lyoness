@@ -21,7 +21,6 @@
             background-color: yellow;
         }
 
-               /* Title Screen Styling */
                #title-screen {
             position: absolute;
             width: 100vw;
@@ -30,7 +29,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: url('background.jpg') no-repeat center center / cover; /* Add background image */
+            background: url('background.jpg') no-repeat center center / cover; 
             z-index: 1;
         }
 
@@ -50,9 +49,9 @@
             background-color: darkorange;
         }
 
-        /* Game screen styling */
+
         #game-container {
-            display: none; /* Initially hidden, shown when the game starts */
+            display: none; 
             position: relative;
             width: 900px;
             height: 500px;
@@ -86,7 +85,6 @@
             background-color: orange;
             transition: width 0.1s linear;
         }
-        /* Crayon and Holder Styles */
         .crayon {
             width: 44px;
             height: 145px;
@@ -123,14 +121,11 @@
 </head>
 <body>
 
-    <!-- Title Screen -->
     <div id="title-screen">
         <button id="start-button">Start Game</button>
     </div>
 
-    <!-- Game Container (Hidden initially) -->
     <div id="game-container">
-        <!-- In-game quit button -->
         <button id="quit-button">Quit</button>
 
         <div class="progress-container">
