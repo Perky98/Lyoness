@@ -1,59 +1,145 @@
-
-// crayon = pasteky
-
 const gameContainer = document.getElementById('game-container');
 const levelDisplay = document.getElementById('level');
-const timerDisplay = document.getElementById('timer');
 const statusDisplay = document.getElementById('status');
 const resetButton = document.createElement('button');
+
+const progressBar = document.querySelector('.progress-bar');
+const progressFill = document.querySelector('.progress-fill');
 
 resetButton.textContent = "Restart";
 resetButton.style.position = 'absolute';
 resetButton.style.bottom = '10px';
-resetButton.style.backgroundColor = 'green';
+resetButton.style.backgroundColor = 'orange';
 resetButton.style.right = '10px';
 resetButton.style.fontWeight = 'bold';
 resetButton.style.padding = '10px 20px';
 resetButton.style.fontSize = '20px';
+resetButton.style.borderRadius = '11px';
 gameContainer.appendChild(resetButton);
 
-resetButton.addEventListener('click', resetGame); //klik = resetgame
+resetButton.addEventListener('click', resetGame);
 
-let crayonCount = 3; 
+let crayonCount = 3;
 let origPos = [];
 let shuffledPos = [];
 let LVL = 1;
-let memorizationTimer = 5; 
-let alignmentTimer = 15; 
-let gameActive = false; 
-let holders = []; 
-let memorizationInterval; 
+let memorizationTimer = 5;
+let alignmentTimer = 15;
+let gameActive = false;
+let holders = [];
+let memorizationInterval;
 let alignmentInterval;
 
-function updateLVLdisplay() {levelDisplay.textContent = `Level: ${LVL}`;}
-function updateTimerDisplay(timer) {timerDisplay.textContent = `Cas: ${timer}`;}
+/////////////////////////////////////////////////////////////////////
+function updateLVLdisplay() {
+    levelDisplay.textContent = `Level: ${LVL}`;
+   // levelDisplay.style.color = orange;
+}
+//function updateProgressBar(timer, maxTime) {
+ //   if (timer < 0) timer = 0; // Ensure timer does not go negative
+   // progressFill.style.width = `${(timer / maxTime) * 100}%`;
+//}
+function updateProgressBar(remainingTime, maxTime) {
+    const percentage = Math.max((remainingTime / maxTime) * 100, 0); 
+    progressFill.style.width = `${percentage}%`;
+}
 
-function spawnPastelky()
-{
-    //===CLEAR holders
-    gameContainer.innerHTML = ''; 
+
+/////////////////////////////////////////////////////////////////////////
+function spawnPastelky() {
+    updateProgressBar(5, 5);
+    gameContainer.innerHTML = '';
     gameContainer.appendChild(levelDisplay);
-    gameContainer.appendChild(timerDisplay);
     gameContainer.appendChild(statusDisplay);
-    gameContainer.appendChild(resetButton); 
-    
-    origPos = []; 
-    holders = []; 
+    gameContainer.appendChild(resetButton);
+    gameContainer.appendChild(progressBar);
 
-    //--------------------------------------------
+    origPos = [];
+    holders = [];
 
-    for (let i = 0; i < crayonCount; i++) 
-    {
+    for (let i = 0; i < crayonCount; i++) {
+        const holder = document.createElement('img'); 
+        holder.classList.add('holder');
+        holder.src = 'c0.png'; 
+
+        const posX = 50 + (i * 100);
+        const posY = gameContainer.clientHeight / 2 - 50;
+
+        holder.style.position = 'absolute';
+        holder.style.left = `${posX}px`;
+        holder.style.top = `${posY}px`;
+
+        gameContainer.appendChild(holder);
+
+        holders.push({ x: posX, y: posY });
+    }
+    /*for (let i = 0; i < crayonCount; i++) {
         const holder = document.createElement('div');
         holder.classList.add('holder');
 
-        const posX = 50 + (i * 100); // space 
-        const posY = gameContainer.clientHeight / 2 - 50; 
+        const posX = 50 + (i * 100);
+        const posY = gameContainer.clientHeight / 2 - 50;
+
+        holder.style.left = `${posX}px`;
+        holder.style.top = `${posY}px`;
+
+        gameContainer.appendChild(holder);
+
+        holders.push({ x: posX, y: posY });
+    }*/
+
+    // Place crayons in random initial positions
+    let randomizedPositions = [...holders];
+    randomizedPositions.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < crayonCount; i++) {
+        const crayon = document.createElement('img');
+        crayon.classList.add('crayon');
+        crayon.src = `crayon${i + 1}.png`; 
+        crayon.style.position = 'absolute';
+        crayon.draggable = false; //ez
+
+        const holderX = randomizedPositions[i].x;
+        const holderY = randomizedPositions[i].y;
+
+        const crayonX = holderX + (21) / 2;
+        const crayonY = holderY + (-80) / 2;
+
+        crayon.style.left = `${crayonX}px`;
+        crayon.style.top = `${crayonY}px`;
+        gameContainer.appendChild(crayon);
+
+
+        origPos.push({ x: crayonX, y: crayonY });
+    }
+
+    startMemorizationPhase();
+}
+
+window.addEventListener('resize', () => {
+    spawnPastelky(); 
+});
+
+
+
+
+/*function spawnPastelky() {
+    updateProgressBar(5, 5);
+    gameContainer.innerHTML = '';
+    gameContainer.appendChild(levelDisplay);
+    gameContainer.appendChild(statusDisplay);
+    gameContainer.appendChild(resetButton);
+    gameContainer.appendChild(progressBar);
+    
+    origPos = [];
+    holders = [];
+
+    for (let i = 0; i < crayonCount; i++) {
+        const holder = document.createElement('div');
+        holder.classList.add('holder');
+
+        const posX = 50 + (i * 100);
+        const posY = gameContainer.clientHeight / 2 - 50;
 
         holder.style.left = `${posX}px`;
         holder.style.top = `${posY}px`;
@@ -66,114 +152,107 @@ function spawnPastelky()
     const colors = getDistinctColors(crayonCount);
     
     let randomizedPositions = [...holders];
-    randomizedPositions.sort(() => Math.random() - 0.5); // after mem phase rand pos 
+    randomizedPositions.sort(() => Math.random() - 0.5);
 
-    for (let i = 0; i < crayonCount; i++) 
-        {
+    for (let i = 0; i < crayonCount; i++) {
         const crayon = document.createElement('div');
         crayon.classList.add('crayon');
         crayon.style.backgroundColor = colors[i];
         const holderX = randomizedPositions[i].x;
         const holderY = randomizedPositions[i].y;
 
-        const crayonX = holderX + (57 - 44) / 2; // doleposun
-        const crayonY = holderY + (107 - 94) / 2; // 
+        const crayonX = holderX + (57 - 44) / 2;
+        const crayonY = holderY + (107 - 94) / 2;
 
         crayon.style.left = `${crayonX}px`;
         crayon.style.top = `${crayonY}px`;
         gameContainer.appendChild(crayon);
 
-        origPos.push({ x: crayonX, y: crayonY }); //orig pos store
+        origPos.push({ x: crayonX, y: crayonY });
     }
 
-    startMemorizationPhase(); //start5 mem 
-}
+    startMemorizationPhase();
+}*/
 
-function startMemorizationPhase() 
-{
+function startMemorizationPhase() {
     memorizationTimer = 5; 
-    gameActive = false; 
-    updateTimerDisplay(memorizationTimer);
+    gameActive = false;
+    updateProgressBar(memorizationTimer, memorizationTimer); 
     statusDisplay.textContent = 'Zapamataj si usporiadanie pasteliek!';
 
-    clearInterval(memorizationInterval); //fix2 
-    
-    memorizationInterval = setInterval(() => 
-    {
-        memorizationTimer--;
-        updateTimerDisplay(memorizationTimer);
+    clearInterval(memorizationInterval);
+    memorizationInterval = setInterval(() => {
+        memorizationTimer -= 0.1; 
+        console.log(`Timer: ${memorizationTimer.toFixed(1)}`); 
 
-        if (memorizationTimer <= 0) // aftr 5sec
-            { 
+        updateProgressBar(memorizationTimer, 5); 
+
+        if (memorizationTimer <= 0) {
             clearInterval(memorizationInterval);
-            shuffleCrayons(); 
-            startAlignmentTimer(); 
+            memorizationTimer = 0; 
+            updateProgressBar(memorizationTimer, 5);
+            shuffleCrayons();
+            startAlignmentTimer();
         }
-    }, 1000);
+    }, 100); 
 }
-function startAlignmentTimer() 
-{
-    alignmentTimer = 15; 
-    gameActive = true; 
-    updateTimerDisplay(alignmentTimer);
-    statusDisplay.textContent = 'Usporiadaj pastelky'; 
 
-    clearInterval(alignmentInterval); 
+function startAlignmentTimer() {
+    alignmentTimer = 15;
+    gameActive = true;
+    updateProgressBar(15, 15);
+    statusDisplay.textContent = 'Usporiadaj pastelky';
+
+    clearInterval(alignmentInterval);
 
     alignmentInterval = setInterval(() => {
         alignmentTimer--;
-        updateTimerDisplay(alignmentTimer);
+        updateProgressBar(alignmentTimer, 15);
 
-        if (alignmentTimer <= 0)
-        {
+        if (alignmentTimer <= 0) {
             clearInterval(alignmentInterval);
-            statusDisplay.textContent = 'Cas uplinul'; 
-            gameActive = false; 
+            statusDisplay.textContent = 'Cas uplinul';
+            gameActive = false;
             setTimeout(resetGame, 2000);
         }
     }, 1000);
 
-    enableDrag(); 
+    enableDrag();
 }
 
-function shuffleCrayons() 
-{
+function shuffleCrayons() {
     const crayons = document.querySelectorAll('.crayon');
     shuffledPos = [...holders];
 
-    do 
-    {//till distinct from orig pos
+    do {
         shuffledPos.sort(() => Math.random() - 0.5);
-    } while (positionsAreEqual(shuffledPos, origPos)); // mmust be false to exit loop 
+    } while (positionsAreEqual(shuffledPos, origPos));
 
     crayons.forEach((crayon, index) => {
         const posX = shuffledPos[index].x + 5;
-        const posY = shuffledPos[index].y + 150; 
+        const posY = shuffledPos[index].y + 150;
 
         crayon.style.left = `${posX}px`;
-        crayon.style.top = `${posY}px`; 
+        crayon.style.top = `${posY}px`;
     });
 }
 
-function positionsAreEqual(positions1, positions2) 
-{
-    for (let i = 0; i < positions1.length; i++) 
-        {
-        if (positions1[i].x === positions2[i].x && positions1[i].y === positions2[i].y)return true; 
-        }
-    return false; 
+function positionsAreEqual(positions1, positions2) {
+    for (let i = 0; i < positions1.length; i++) {
+        if (positions1[i].x === positions2[i].x && positions1[i].y === positions2[i].y) return true;
+    }
+    return false;
 }
 
-function enableDrag() 
-{
+function enableDrag() {
     const crayons = document.querySelectorAll('.crayon');
-    
+
     crayons.forEach(crayon => {
-        crayon.style.position = 'absolute'; 
+        crayon.style.position = 'absolute';
         crayon.style.cursor = 'pointer';
 
         crayon.removeEventListener('mousedown', dragStart);
-        crayon.addEventListener('mousedown', dragStart); 
+        crayon.addEventListener('mousedown', dragStart);
     });
 }
 
@@ -181,44 +260,71 @@ let selectedCrayon = null;
 let offsetX = 0;
 let offsetY = 0;
 
-let prevPosition = { x: 0, y: 0 }; 
+function dragStart(e) {
+   
+    if (!gameActive || e.button !== 0) return;
 
-function dragMove(e) 
-{
-    if (!selectedCrayon) return; 
-    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
-    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
-}
-function dragStart(e) 
-{
-    if (!gameActive) return; 
+    selectedCrayon = e.target;
+    offsetX = e.clientX - parseFloat(selectedCrayon.style.left);
+    offsetY = e.clientY - parseFloat(selectedCrayon.style.top);
 
-    selectedCrayon = e.target; 
-    prevPosition = { 
-        x: parseFloat(selectedCrayon.style.left), 
-        y: parseFloat(selectedCrayon.style.top) 
-    }; 
-
-    offsetX = e.clientX - parseInt(selectedCrayon.style.left); 
-    offsetY = e.clientY - parseInt(selectedCrayon.style.top);
-
-    document.addEventListener('mousemove', dragMove); 
+    document.addEventListener('mousemove', dragMove);
     document.addEventListener('mouseup', dragEnd);
 }
 
-function dragEnd() 
-{
+function dragMove(e) {
+    if (!selectedCrayon) return;
+
+    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
+    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
+}
+
+function dragEnd() {
     if (!selectedCrayon) return;
 
     document.removeEventListener('mousemove', dragMove);
     document.removeEventListener('mouseup', dragEnd);
 
-    checkCrayonPosition(selectedCrayon); 
+    checkCrayonPosition(selectedCrayon);
+
     selectedCrayon = null;
 }
 
-function checkCrayonPosition(crayon) 
-{
+
+/*
+function dragMove(e) {
+    if (!selectedCrayon) return;
+    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
+    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
+}
+
+function dragStart(e) {
+    if (!gameActive) return;
+
+    selectedCrayon = e.target;
+    prevPosition = {
+        x: parseFloat(selectedCrayon.style.left),
+        y: parseFloat(selectedCrayon.style.top)
+    };
+
+    offsetX = e.clientX - parseInt(selectedCrayon.style.left);
+    offsetY = e.clientY - parseInt(selectedCrayon.style.top);
+
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+}
+
+function dragEnd() {
+    if (!selectedCrayon) return;
+
+    document.removeEventListener('mousemove', dragMove);
+    document.removeEventListener('mouseup', dragEnd);
+
+    checkCrayonPosition(selectedCrayon);
+    selectedCrayon = null;
+}*/
+
+function checkCrayonPosition(crayon) {
     const crayonX = parseFloat(crayon.style.left);
     const crayonY = parseFloat(crayon.style.top);
     let placedOnHolder = false;
@@ -228,56 +334,44 @@ function checkCrayonPosition(crayon)
         const holderX = holder.x;
         const holderY = holder.y;
 
-        // Check if crayon is being placed near a holder
-        if (Math.abs(crayonX - holderX) < 50 && Math.abs(crayonY - holderY) < 50) 
-        {
-            // Check if the holder already contains a crayon
+        if (Math.abs(crayonX - holderX) < 50 && Math.abs(crayonY - holderY) < 50) {
             const crayons = document.querySelectorAll('.crayon');
-            crayons.forEach(otherCrayon =>
-                 {
-                if (otherCrayon !== crayon) 
-                    {
+            crayons.forEach(otherCrayon => {
+                if (otherCrayon !== crayon) {
                     const otherCrayonX = parseFloat(otherCrayon.style.left);
                     const otherCrayonY = parseFloat(otherCrayon.style.top);
                     if (Math.abs(otherCrayonX - holderX) < 10 && Math.abs(otherCrayonY - holderY) < 10) holderOccupied = true;
                 }
             });
 
-            if (!holderOccupied) 
-                {
-                //const holderWidth = 100; 
-               // const holderHeight = 150; 
-                //const crayonWidth = 50; 
-                //const crayonHeight = 80; 
+            if (!holderOccupied) {
+                crayon.style.left = `${holderX + (21) / 2}px`;
+                crayon.style.top = `${holderY + (-80) / 2}px`;
 
-                crayon.style.left = `${holderX + (57 - 44) / 2}px`;
-                crayon.style.top = `${holderY + (107 - 94) / 2}px`; 
+                // const crayonX = holderX + (21) / 2;
+                // const crayonY = holderY + (-80) / 2; 
 
-                placedOnHolder = true; 
+                placedOnHolder = true;
             }
         }
     });
 
-    if (holderOccupied) 
-        {
+    if (holderOccupied) {
         crayon.style.left = `${prevPosition.x}px`;
         crayon.style.top = `${prevPosition.y}px`;
     }
 
-    if (placedOnHolder && !holderOccupied && isLevelCompleted()) 
-        {
+    if (placedOnHolder && !holderOccupied && isLevelCompleted()) {
         gameActive = false;
-        clearInterval(alignmentInterval); 
+        clearInterval(alignmentInterval);
         statusDisplay.textContent = 'Spravne';
-        setTimeout(nextLevel, 2000); 
+        setTimeout(nextLevel, 2000);
     } else if (!holderOccupied) {
         statusDisplay.textContent = 'Usporiadaj pastelky';
     }
 }
-//----------------------------------------------------------------------------------------------------------------
-// pastelky ci su usporiadane ok
-function isLevelCompleted() 
-{
+
+function isLevelCompleted() {
     return origPos.every((pos, index) => {
         const crayon = document.querySelectorAll('.crayon')[index];
         const crayonX = parseFloat(crayon.style.left);
@@ -285,125 +379,29 @@ function isLevelCompleted()
         return Math.abs(crayonX - pos.x) < 10 && Math.abs(crayonY - pos.y) < 10;
     });
 }
-function nextLevel() 
-{
+
+function nextLevel() {
     LVL++;
-    crayonCount = Math.min(7, crayonCount + 1); // Max crayons = 7
+    crayonCount = Math.min(7, crayonCount + 1);
     updateLVLdisplay();
-    spawnPastelky(); // Spawn new crayons for next lvl
+    spawnPastelky();
 }
 
-function resetGame() 
-{
+function resetGame() {
     LVL = 1;
-    crayonCount = 3; // min 3 pastelky
+    crayonCount = 3;
     clearInterval(memorizationInterval);
     clearInterval(alignmentInterval);
-    gameActive = false; 
+    gameActive = false;
     updateLVLdisplay();
-    updateTimerDisplay(0);
+    updateProgressBar(1, 1);
     statusDisplay.textContent = 'restatuj hru';
-    spawnPastelky(); // Restart game
+    spawnPastelky();
 }
 
-function getDistinctColors(count) {
-    const colors = ['#FF0000', '#FFFF00', '#FFA500', '#008000', '#0000FF', '#FFC0CB', '#8B4513']; // Red yellow orange green blue pinkbrown
-    return colors.slice(0, count); 
-}
-
-spawnPastelky(); // Staart
-
-
-/*
-function dragStart(e) 
-{
-    if (!gameActive) return; //no draggingd when mem phase
-
-    selectedCrayon = e.target;
-    offsetX = e.clientX - parseInt(selectedCrayon.style.left);
-    offsetY = e.clientY - parseInt(selectedCrayon.style.top);
-
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragEnd);
-}
-
-function dragMove(e)
- {
-    if (!selectedCrayon) return;
-
-    selectedCrayon.style.left = `${e.clientX - offsetX}px`;
-    selectedCrayon.style.top = `${e.clientY - offsetY}px`;
-}
-
-function dragEnd() 
-{
-    if (!selectedCrayon) return;
-
-    document.removeEventListener('mousemove', dragMove);
-    document.removeEventListener('mouseup', dragEnd);
-
-    checkCrayonPosition(selectedCrayon); 
-    selectedCrayon = null;
-}
-
-function checkCrayonPosition(crayon) // check if crayon on correctt holder-------------------------------------
-{ 
-    const crayonX = parseFloat(crayon.style.left);
-    const crayonY = parseFloat(crayon.style.top);
-    let correctPlacement = false; 
-
-    origPos.forEach((pos, index) => {
-        const originalX = pos.x;
-        const originalY = pos.y;
-        if (Math.abs(crayonX - originalX) < 10 && Math.abs(crayonY - originalY) < 10) {
-            crayon.style.left = `${originalX}px`;
-            crayon.style.top = `${originalY}px`;
-            correctPlacement = true; 
-        }
-    });
-
-    if (correctPlacement) 
-        {
-        if (isLevelCompleted()) {
-            gameActive = false; 
-            clearInterval(alignmentInterval); 
-            statusDisplay.textContent = 'Spravne';
-            setTimeout(nextLevel, 2000); 
-        }
-    } else 
-    {
-        statusDisplay.textContent = 'Usporiadaj pastelky';
-    }*/
-
-
-
-
-
-
-/*
-function trackP(pastelky) {
-    pastelky.forEach((pastelky, index) => 
-        {
-        p.addEventListener('mouseup', () => 
-            {
-            if (!gameActive) return;
-
-            const pX = parseFloat(pastelky.style.left);
-            const pY = parseFloat(pastelky.style.top);
-
-            const originalX = originalPositions[index].x;
-            const originalY = originalPositions[index].y;
-
-            if (Math.abs(pX - originalX) < 10 && Math.abs(pY - originalY) < 10) 
-            {
-                pastelky.style.left = `${originalX}px`;
-                pastelky.style.top = `${originalY}px`;
-            }if (isLevelCompleted())
-             {
-                gameActive = false; 
-                statusDisplay.textContent = 'daco rozjebem';
-                setTimeout(nextLevel, 2000); 
-            }
-        });
-    });
+/*function getDistinctColors(count) {
+    const colors = ['#FF0000', '#FFFF00', '#FFA500', '#008000', '#0000FF', '#FFC0CB', '#8B4513'];
+    return colors.slice(0, count);
 }*/
+
+spawnPastelky();
