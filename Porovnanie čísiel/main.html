@@ -1,18 +1,20 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="sk">
 <head>
- <title></title>
- <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porovnanie obrázkov</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <h1>Porovnanie čísiel</h1>
-    <div id="number"></div>
+    <h1>Porovnanie obrázkov</h1>
+    <div id="imageContainer"></div>
     <div id="result"></div>
     <button onclick="checkSame(true)" id="sameBtn" disabled>Rovnaké</button>
     <button onclick="checkSame(false)" id="diffBtn" disabled>Rôzne</button>
     <p>Body: <span id="score">0</span></p>
     <p>Čas: <span id="timer">60</span> sekúnd</p>
     <button onclick="startGame()" id="startBtn">Spustiť hru</button>
- <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
