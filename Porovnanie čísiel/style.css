@@ -1,3 +1,12 @@
-* {
-    background-color: blueviolet;
+body {
+    background-color: #B9A8C4;
+    display: flex;
+    justify-content: center;
 }
+
+.resultPanel {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
