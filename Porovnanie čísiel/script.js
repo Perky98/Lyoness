@@ -12,13 +12,23 @@ const images = [
 ];
 
 function loadInitialImage() {
-  currentImage = images[Math.floor(Math.random() * images.length)];
-  document.getElementById('imageContainer').innerHTML = `<img src="${currentImage}" alt="obrázok">`;
+    currentImage = images[Math.floor(Math.random() * images.length)];
+    document.getElementById('imageContainer').innerHTML = `<img src="${currentImage}" alt="obrázok">`;
 }
 
 function generateImage() {
     previousImage = currentImage;
-    currentImage = images[Math.floor(Math.random() * images.length)];
+    
+    
+    if (Math.random() < 0.35) {
+        
+        currentImage = previousImage;
+    } else {
+        
+        const remainingImages = images.filter(img => img !== previousImage);
+        currentImage = remainingImages[Math.floor(Math.random() * remainingImages.length)];
+    }
+
     document.getElementById('imageContainer').innerHTML = `<img src="${currentImage}" alt="obrázok">`;
 }
 
