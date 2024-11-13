@@ -12,53 +12,152 @@ let timerInterval;
 const levelDisplay = document.getElementById("levelDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
 const messageDisplay = document.getElementById("messageDisplay");
-const levels = [];
-function generateRandomLevel(level) {
-    const points = [];
-    const colors = ["red", "blue", "green", "yellow", "purple"];
-    const pairs = level + 2; 
+const fixedLevel = [
+    [
+        { x: 0, y: 0, color: "yellow" },
+        { x: 1, y: 0, color: "green" },
+        { x: 0, y: 1, color: "yellow" },
+        { x: 1, y: 1, color: "green" }
+    ]
+];
 
-    while (points.length < pairs * 2) {
-        const color = colors[Math.floor(points.length / 2)];
-        const point = { x: Math.floor(Math.random() * gridSize),
-            y: Math.floor(Math.random() * gridSize),
-            color,
-        };
-        if (!points.some(p => p.x === point.x && p.y === point.y)) {
-            points.push(point);
-        }
-    }
-    return points;
-}
+// 2 level 
+const randomLevels = [
+    [
+        { x: 0, y: 0, color: "red" },
+        { x: 2, y: 0, color: "red" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 2, color: "yellow" },
+        { x: 0, y: 2, color: "yellow" },
+        { x: 2, y: 1, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "blue" },
+        { x: 1, y: 0, color: "blue" },
+        { x: 2, y: 0, color: "red" },
+        { x: 0, y: 1, color: "green" },
+        { x: 1, y: 1, color: "red" },
+        { x: 2, y: 2, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "orange" },
+        { x: 2, y: 0, color: "orange" },
+        { x: 0, y: 1, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 1, color: "purple" },
+        { x: 1, y: 2, color: "green" }
+    ]
+];
+
+// 3 level 
+const randomLevels3 = [
+    [
+        { x: 0, y: 0, color: "red" },
+        { x: 2, y: 0, color: "red" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 2, color: "yellow" },
+        { x: 0, y: 2, color: "yellow" },
+        { x: 2, y: 1, color: "green" },
+       { x: 1, y: 3, color: "blue" },
+        { x: 3, y: 3, color: "blue" } 
+    ],
+    [
+        { x: 0, y: 0, color: "blue" },
+        { x: 1, y: 0, color: "blue" },
+        { x: 2, y: 0, color: "red" },
+        { x: 0, y: 1, color: "green" },
+        { x: 1, y: 1, color: "red" },
+        { x: 2, y: 2, color: "green" },
+       { x: 2, y: 3, color: "yellow" },
+        { x: 1, y: 3, color: "yellow" } 
+    ],
+    [
+        { x: 0, y: 0, color: "orange" },
+        { x: 0, y: 1, color: "orange" },
+        { x: 1, y: 2, color: "purple" },
+        { x: 2, y: 2, color: "green" },
+        { x: 3, y: 1, color: "purple" },
+        { x: 1, y: 3, color: "green" },
+       { x: 2, y: 1, color: "yellow" },
+        { x: 0, y: 3, color: "yellow" } 
+    ]
+];
+//4 level
+const randomLevels4 = [
+    [
+        { x: 0, y: 0, color: "red" },
+        { x: 2, y: 0, color: "red" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 2, color: "yellow" },
+        { x: 0, y: 2, color: "yellow" },
+        { x: 2, y: 1, color: "green" },
+        { x: 1, y: 2, color: "blue" },
+        { x: 3, y: 2, color: "blue" },
+        { x: 4, y: 0, color: "purple" } 
+    ],
+    [
+        { x: 0, y: 0, color: "blue" },
+        { x: 1, y: 0, color: "blue" },
+        { x: 2, y: 0, color: "red" },
+        { x: 0, y: 1, color: "green" },
+        { x: 1, y: 1, color: "red" },
+        { x: 2, y: 2, color: "green" },
+        { x: 2, y: 3, color: "yellow" },
+        { x: 1, y: 3, color: "yellow" },
+        { x: 4, y: 2, color: "orange" },
+      { x: 4, y: 1, color: "orange" } 
+    ],
+    [
+        { x: 0, y: 0, color: "orange" },
+        { x: 2, y: 0, color: "orange" },
+        { x: 0, y: 1, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 3, color: "purple" },
+        { x: 1, y: 3, color: "green" },
+        { x: 2, y: 1, color: "yellow" },
+        { x: 0, y: 3, color: "yellow" },
+        { x: 4, y: 2, color: "cyan" },
+       { x: 0, y: 3, color: "cyan" }
+    ]
+];
 
 
 function initGame() {
     paths = [];
+    completedConnections = [];
     startTime = Date.now();
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTime, 1000);
 
-  
-    if (level < 4) { 
-        levels[level] = generateRandomLevel(level); 
+    if (level === 0) {
+        levels = fixedLevel[0];
+    } else if (level === 1) {
+        levels = getRandomLevel(randomLevels);
+    } else if (level === 2) {
+        levels = getRandomLevel(randomLevels3);
+    } else if (level === 3) {
+        levels = getRandomLevel(randomLevels4);
     }
+
     drawGrid();
     drawPoints();
     updateLevelDisplay();
-    hideMessage(); 
+    hideMessage();
 
-    
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
 }
 
+
+
 function updateTime() {
     const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    timeDisplay.textContent = `${elapsedTime} `;
+    timeDisplay.textContent = `${elapsedTime} сек`;
 }
+
 function updateLevelDisplay() {
-    levelDisplay.textContent = `Level: ${level + 1}`;
+    levelDisplay.textContent = `Рівень: ${level + 1}`;
 }
 
 function drawGrid() {
@@ -75,7 +174,7 @@ function drawGrid() {
 }
 
 function drawPoints() {
-    for (const point of levels[level]) {
+    for (const point of levels) {
         ctx.fillStyle = point.color;
         ctx.beginPath();
         ctx.arc(
@@ -93,9 +192,12 @@ function getCell(x, y) {
 
 function handleMouseDown(event) {
     const cell = getCell(event.offsetX, event.offsetY);
-    startCell = levels[level].find(p => p.x === cell.x && p.y === cell.y);
-    if (startCell) {
+    startCell = levels.find(p => p.x === cell.x && p.y === cell.y);
+
+    if (startCell && !completedConnections.includes(`${startCell.x}-${startCell.y}-${startCell.color}`)) {
         paths.push({ color: startCell.color, path: [{ x: cell.x, y: cell.y }] });
+    } else {
+        startCell = null;
     }
 }
 
@@ -104,7 +206,18 @@ function handleMouseMove(event) {
     const cell = getCell(event.offsetX, event.offsetY);
     const lastPath = paths[paths.length - 1];
     const lastCell = lastPath.path[lastPath.path.length - 1];
+
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
+        if (isIntersecting(cell, lastPath)) {
+            alert("!");
+            paths.pop();
+            drawGrid();
+            drawPoints();
+            drawPaths();
+            startCell = null;
+            return;
+        }
+
         lastPath.path.push(cell);
         drawGrid();
         drawPoints();
@@ -113,21 +226,60 @@ function handleMouseMove(event) {
 }
 
 function handleMouseUp() {
-    startCell = null; 
+    if (!startCell) return;
+    const lastPath = paths[paths.length - 1];
+    const startColor = lastPath.color;
+
+    if (checkConnectionComplete(lastPath, startColor)) {
+        for (const cell of lastPath.path) {
+            completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
+        }
+    } else {
+        alert("!");
+        paths.pop();
+        drawGrid();
+        drawPoints();
+        drawPaths();
+    }
+
+    startCell = null;
+
     if (checkWin()) {
-        alert("level pased");
-        level++; 
- if (level < 4) {
+        alert("level complete!");
+        level++;
+        if (level < 4) {
             initGame();
         } else {
-            showCompletionMessage(); 
-            clearInterval(timerInterval); 
+            showCompletionMessage();
+            clearInterval(timerInterval);
         }
     }
 }
 
 function isValidMove(from, to) {
     return Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1;
+}
+
+function isIntersecting(cell, currentPath) {
+    for (const path of paths) {
+        if (path !== currentPath) {
+            if (path.path.some(p => p.x === cell.x && p.y === cell.y && path.color !== currentPath.color)) {
+                return true;
+            }
+        }
+    }
+
+    for (const point of levels) {
+        if (point.x === cell.x && point.y === cell.y && point.color !== currentPath.color) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function checkConnectionComplete(path, color) {
+    const pointsOfColor = levels.filter(p => p.color === color);
+    return pointsOfColor.every(point => path.path.some(cell => cell.x === point.x && cell.y === point.y));
 }
 
 function drawPaths() {
@@ -148,26 +300,37 @@ function drawPaths() {
         ctx.stroke();
     }
 }
+
 function checkWin() {
-    return levels[level].every(point => paths.some(path => {
+    return levels.every(point => paths.some(path => {
         return path.color === point.color && path.path.some(p => p.x === point.x && p.y === point.y);
     }));
 }
+
 function showCompletionMessage() {
-    messageDisplay.textContent = "Congrat! You complete all level";
-    messageDisplay.style.display = "block"; 
-    resetGame(); 
+    messageDisplay.textContent = "Вітаємо! Ви пройшли всі рівні";
+    messageDisplay.style.display = "block";
+    resetGame();
 }
+
 function hideMessage() {
-    messageDisplay.style.display = "none"; 
+    messageDisplay.style.display = "none";
 }
+
 function resetGame() {
     setTimeout(() => {
-        level = 0; 
-        initGame(); 
-    }, 3000); 
+        level = 0;
+        initGame();
+    }, 3000);
 }
 
+function getRandomLevel(levels) {
+    const randomIndex = Math.floor(Math.random() * levels.length);
+    return levels[randomIndex];
+}
 
 initGame();
+  
+
+
 
