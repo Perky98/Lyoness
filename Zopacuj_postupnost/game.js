@@ -3,13 +3,12 @@ let playerSequence = [];
 let level = 1;
 let score = 0;
 let clickable = false;
-let isPaused = false;
 
 const gridContainer = document.getElementById('grid-container');
 const levelText = document.getElementById('level');
 const scoreText = document.getElementById('score');
 const restartBtn = document.getElementById('restart-btn');
-const pauseBtn = document.getElementById('pause-btn');
+
 const gameOverMessage = document.getElementById('game-over-message'); 
 for (let i = 0; i < 16; i++) {
     const square = document.createElement('div');
@@ -20,7 +19,7 @@ for (let i = 0; i < 16; i++) {
 }
 startGame();
 restartBtn.addEventListener('click', restartGame);
-pauseBtn.addEventListener('click', togglePause);
+
 function startGame() {
     resetGame();
     nextLevel();
@@ -66,9 +65,7 @@ function flashTile(tileId) {
 }
 
 function handlePlayerClick(e) {
-    if (!clickable || isPaused) return;
-
-    const tileId = parseInt(e.target.getAttribute('data-id'));
+  const tileId = parseInt(e.target.getAttribute('data-id'));
     playerSequence.push(tileId);
     e.target.classList.add('clicked');
     setTimeout(() => {
@@ -96,12 +93,6 @@ function clearGrid() {
         item.classList.remove('active', 'clicked');
     });
 }
-
-function togglePause() {
-    isPaused = !isPaused;
-    pauseBtn.innerText = isPaused ? "Resume" : "Pause";
-}
-
 function restartGame() {
     resetGame();
     startGame();
