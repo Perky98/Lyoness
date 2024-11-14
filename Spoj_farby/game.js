@@ -114,9 +114,9 @@ const randomLevels4 = [
         { x: 0, y: 1, color: "purple" },
         { x: 1, y: 1, color: "green" },
         { x: 2, y: 3, color: "purple" },
-        { x: 1, y: 3, color: "green" },
+        { x: 2, y: 2, color: "green" },
         { x: 2, y: 1, color: "yellow" },
-        { x: 0, y: 3, color: "yellow" },
+        { x: 4, y: 0, color: "yellow" },
         { x: 4, y: 2, color: "cyan" },
        { x: 0, y: 3, color: "cyan" }
     ]
