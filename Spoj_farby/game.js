@@ -1,17 +1,19 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const gridSize = 5;
-const cellSize = canvas.width / gridSize;
+let gridSize = 5;
+let cellSize = canvas.width / gridSize;
 let startCell = null;
 let paths = [];
 let level = 0;
 let startTime;
 let timerInterval;
+let completedConnections = [];
 
 const levelDisplay = document.getElementById("levelDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
 const messageDisplay = document.getElementById("messageDisplay");
+
 const fixedLevel = [
     [
         { x: 0, y: 0, color: "yellow" },
@@ -21,7 +23,6 @@ const fixedLevel = [
     ]
 ];
 
-// 2 level 
 const randomLevels = [
     [
         { x: 0, y: 0, color: "red" },
@@ -42,9 +43,9 @@ const randomLevels = [
     [
         { x: 0, y: 0, color: "orange" },
         { x: 2, y: 0, color: "orange" },
-        { x: 0, y: 1, color: "purple" },
-        { x: 1, y: 1, color: "green" },
-        { x: 2, y: 1, color: "purple" },
+        { x: 1, y: 1, color: "purple" },
+        { x: 2, y: 1, color: "green" },
+        { x: 0, y: 2, color: "purple" },
         { x: 1, y: 2, color: "green" }
     ]
 ];
@@ -129,6 +130,9 @@ function initGame() {
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTime, 1000);
 
+    gridSize = 2 + level; // e.g., 2x2 for level 0, 3x3 for level 1, etc.
+    cellSize = canvas.width / gridSize;
+
     if (level === 0) {
         levels = fixedLevel[0];
     } else if (level === 1) {
@@ -138,7 +142,6 @@ function initGame() {
     } else if (level === 3) {
         levels = getRandomLevel(randomLevels4);
     }
-
     drawGrid();
     drawPoints();
     updateLevelDisplay();
@@ -149,15 +152,13 @@ function initGame() {
     canvas.addEventListener("mouseup", handleMouseUp);
 }
 
-
-
 function updateTime() {
     const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    timeDisplay.textContent = `${elapsedTime} сек`;
+    timeDisplay.textContent = `${elapsedTime} sec`;
 }
 
 function updateLevelDisplay() {
-    levelDisplay.textContent = `Рівень: ${level + 1}`;
+    levelDisplay.textContent = `Level: ${level + 1}`;
 }
 
 function drawGrid() {
@@ -209,7 +210,7 @@ function handleMouseMove(event) {
 
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
         if (isIntersecting(cell, lastPath)) {
-            alert("!");
+            showMessage("Path intersects with an existing path or point.");
             paths.pop();
             drawGrid();
             drawPoints();
@@ -235,7 +236,7 @@ function handleMouseUp() {
             completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
         }
     } else {
-        alert("!");
+        showMessage("Path not complete!");
         paths.pop();
         drawGrid();
         drawPoints();
@@ -245,7 +246,7 @@ function handleMouseUp() {
     startCell = null;
 
     if (checkWin()) {
-        alert("level complete!");
+        alert("Level complete!");
         level++;
         if (level < 4) {
             initGame();
@@ -268,7 +269,6 @@ function isIntersecting(cell, currentPath) {
             }
         }
     }
-
     for (const point of levels) {
         if (point.x === cell.x && point.y === cell.y && point.color !== currentPath.color) {
             return true;
@@ -308,9 +308,15 @@ function checkWin() {
 }
 
 function showCompletionMessage() {
-    messageDisplay.textContent = "Вітаємо! Ви пройшли всі рівні";
+    messageDisplay.textContent = "Congratulations! You've completed all levels.";
     messageDisplay.style.display = "block";
     resetGame();
+}
+
+function showMessage(text) {
+    messageDisplay.textContent = text;
+    messageDisplay.style.display = "block";
+    setTimeout(hideMessage, 2000);
 }
 
 function hideMessage() {
@@ -330,7 +336,4 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-  
-
-
 
