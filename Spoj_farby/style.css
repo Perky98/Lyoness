@@ -1,58 +1,51 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f4f4f9;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
+    min-height: 100vh;
+    background-color: #f0f0f0;
 }
 
 .game-container {
     text-align: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 450px;
 }
 
-.game-info {
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.info {
     display: flex;
     justify-content: space-between;
+    font-size: 1.2em;
     margin-bottom: 10px;
-    font-size: 18px;
-    color: #555;
 }
 
-
-#gameCanvas {
+canvas {
     border: 2px solid #333;
-    background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-top: 10px;
 }
 
 .message {
     display: none;
-    margin-top: 15px;
-    padding: 10px;
-    font-size: 20px;
-    color: #2c662d;
-    background-color: #daf7dc;
-    border: 1px solid #2c662d;
-    border-radius: 5px;
-}
-
-
-.message.show {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    font-size: 1.4em;
+    color: green;
+    margin-top: 20px;
+    font-weight: bold;
 }
 
 	  
