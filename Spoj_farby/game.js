@@ -25,27 +25,43 @@ const fixedLevel = [
 
 const randomLevels = [
     [
-        { x: 0, y: 0, color: "red" },
-        { x: 2, y: 0, color: "red" },
-        { x: 1, y: 1, color: "green" },
-        { x: 2, y: 2, color: "yellow" },
-        { x: 0, y: 2, color: "yellow" },
-        { x: 2, y: 1, color: "green" }
-    ],
-    [
-        { x: 0, y: 0, color: "blue" },
-        { x: 1, y: 0, color: "blue" },
-        { x: 2, y: 0, color: "red" },
-        { x: 0, y: 1, color: "green" },
-        { x: 1, y: 1, color: "red" },
-        { x: 2, y: 2, color: "green" }
-    ],
-    [
-        { x: 0, y: 0, color: "orange" },
-        { x: 2, y: 0, color: "orange" },
-        { x: 1, y: 1, color: "purple" },
-        { x: 2, y: 1, color: "green" },
+        { x: 0, y: 0, color: "purple" },
         { x: 0, y: 2, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 1, color: "blue" },
+        { x: 1, y: 2, color: "blue" },
+        { x: 0, y: 2, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "purple" },
+        { x: 1, y: 2, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 1, color: "blue" },
+        { x: 2, y: 2, color: "blue" },
+        { x: 2, y: 0, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "purple" },
+        { x: 1, y: 2, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 0, color: "blue" },
+        { x: 2, y: 2, color: "blue" },
+        { x: 1, y: 0, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "purple" },
+        { x: 0, y: 1, color: "purple" },
+        { x: 2, y: 0, color: "blue" },
+        { x: 1, y: 1, color: "green" },
+        { x: 0, y: 2, color: "blue" },
+        { x: 1, y: 0, color: "green" }
+    ],
+    [
+        { x: 0, y: 0, color: "purple" },
+        { x: 2, y: 0, color: "blue" },
+        { x: 0, y: 2, color: "purple" },
+        { x: 1, y: 0, color: "green" },
+        { x: 2, y: 2, color: "blue" },
         { x: 1, y: 2, color: "green" }
     ]
 ];
@@ -53,73 +69,117 @@ const randomLevels = [
 // 3 level 
 const randomLevels3 = [
     [
-        { x: 0, y: 0, color: "red" },
-        { x: 2, y: 0, color: "red" },
-        { x: 1, y: 1, color: "green" },
-        { x: 2, y: 2, color: "yellow" },
-        { x: 0, y: 2, color: "yellow" },
+        { x: 1, y: 3, color: "purple" },
+        { x: 3, y: 1, color: "purple" },
+        { x: 2, y: 2, color: "green" },
+        { x: 0, y: 3, color: "green" },
+        { x: 1, y: 1, color: "yellow" },
+        { x: 2, y: 1, color: "yellow" },
+        { x: 0, y: 1, color: "blue" },
+        { x: 3, y: 0, color: "blue" } 
+    ],
+   [
+        { x: 3, y: 3, color: "purple" },
+        { x: 3, y: 1, color: "purple" },
         { x: 2, y: 1, color: "green" },
-       { x: 1, y: 3, color: "blue" },
+        { x: 0, y: 3, color: "green" },
+        { x: 0, y: 0, color: "yellow" },
+        { x: 1, y: 2, color: "yellow" },
+        { x: 1, y: 1, color: "blue" },
+        { x: 3, y: 0, color: "blue" } 
+    ],
+   [
+        { x: 0, y: 0, color: "purple" },
+        { x: 2, y: 1, color: "purple" },
+        { x: 1, y: 3, color: "green" },
+        { x: 0, y: 1, color: "green" },
+        { x: 1, y: 1, color: "yellow" },
+        { x: 2, y: 3, color: "yellow" },
+        { x: 3, y: 3, color: "blue" },
+        { x: 3, y: 0, color: "blue" } 
+    ],
+   
+    [
+        { x: 0, y: 0, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 1, color: "purple" },
+        { x: 2, y: 3, color: "green" },
+       { x: 1, y: 2, color: "blue" },
         { x: 3, y: 3, color: "blue" } 
     ],
     [
-        { x: 0, y: 0, color: "blue" },
-        { x: 1, y: 0, color: "blue" },
-        { x: 2, y: 0, color: "red" },
-        { x: 0, y: 1, color: "green" },
-        { x: 1, y: 1, color: "red" },
-        { x: 2, y: 2, color: "green" },
-       { x: 2, y: 3, color: "yellow" },
-        { x: 1, y: 3, color: "yellow" } 
-    ],
-    [
-        { x: 0, y: 0, color: "orange" },
-        { x: 0, y: 1, color: "orange" },
-        { x: 1, y: 2, color: "purple" },
-        { x: 2, y: 2, color: "green" },
-        { x: 3, y: 1, color: "purple" },
-        { x: 1, y: 3, color: "green" },
-       { x: 2, y: 1, color: "yellow" },
-        { x: 0, y: 3, color: "yellow" } 
+        { x: 0, y: 0, color: "purple" },
+        { x: 1, y: 1, color: "green" },
+        { x: 2, y: 1, color: "purple" },
+        { x: 0, y: 3, color: "green" },
+       { x: 3, y: 2, color: "blue" },
+        { x: 3, y: 3, color: "blue" } 
     ]
 ];
 //4 level
 const randomLevels4 = [
     [
-        { x: 0, y: 0, color: "red" },
-        { x: 2, y: 0, color: "red" },
-        { x: 1, y: 1, color: "green" },
-        { x: 2, y: 2, color: "yellow" },
-        { x: 0, y: 2, color: "yellow" },
-        { x: 2, y: 1, color: "green" },
-        { x: 1, y: 2, color: "blue" },
-        { x: 3, y: 2, color: "blue" },
-        { x: 4, y: 0, color: "purple" } 
+        { x: 0, y: 3, color: "lightgreen" },
+        { x: 4, y: 3, color: "lightgreen" },
+        { x: 1, y: 3, color: "green" },
+        { x: 2, y: 2, color: "green" },
+        { x: 3, y: 3, color: "yellow" },
+        { x: 4, y: 2, color: "yellow" },
+        { x: 0, y: 2, color: "blue" },
+        { x: 4, y: 0, color: "blue" },
+        { x: 0, y: 1, color: "purple" }, 
+        { x: 0, y: 0, color: "purple" } 
     ],
-    [
-        { x: 0, y: 0, color: "blue" },
-        { x: 1, y: 0, color: "blue" },
-        { x: 2, y: 0, color: "red" },
+     [
+        { x: 0, y: 4, color: "lightgreen" },
+        { x: 1, y: 1, color: "lightgreen" },
+        { x: 1, y: 4, color: "green" },
         { x: 0, y: 1, color: "green" },
-        { x: 1, y: 1, color: "red" },
-        { x: 2, y: 2, color: "green" },
-        { x: 2, y: 3, color: "yellow" },
+        { x: 3, y: 3, color: "yellow" },
+        { x: 3, y: 1, color: "yellow" },
+        { x: 3, y: 0, color: "purple" }, 
+        { x: 2, y: 4, color: "purple" } 
+    ],
+[
+        { x: 0, y: 4, color: "green" },
+        { x: 4, y: 2, color: "green" },
+        { x: 2, y: 1, color: "yellow" },
+        { x: 4, y: 1, color: "yellow" },
+        { x: 2, y: 2, color: "blue" },
+        { x: 4, y: 0, color: "blue" },
+        { x: 3, y: 2, color: "purple" }, 
+        { x: 0, y: 0, color: "purple" } 
+    ],
+[
+        { x: 0, y: 1, color: "green" },
+        { x: 4, y: 2, color: "green" },
+        { x: 1, y: 2, color: "yellow" },
+        { x: 4, y: 1, color: "yellow" },
+        { x: 2, y: 0, color: "blue" },
+        { x: 4, y: 0, color: "blue" },
+        { x: 2, y: 2, color: "purple" }, 
+        { x: 0, y: 0, color: "purple" } 
+    ],
+[
+        { x: 0, y: 3, color: "green" },
+        { x: 4, y: 2, color: "green" },
         { x: 1, y: 3, color: "yellow" },
-        { x: 4, y: 2, color: "orange" },
-      { x: 4, y: 1, color: "orange" } 
+        { x: 4, y: 1, color: "yellow" },
+        { x: 1, y: 2, color: "blue" },
+        { x: 4, y: 0, color: "blue" },
+        { x: 2, y: 2, color: "purple" }, 
+        { x: 1, y: 1, color: "purple" } 
     ],
     [
-        { x: 0, y: 0, color: "orange" },
-        { x: 2, y: 0, color: "orange" },
-        { x: 0, y: 1, color: "purple" },
-        { x: 1, y: 1, color: "green" },
-        { x: 2, y: 3, color: "purple" },
-        { x: 2, y: 2, color: "green" },
-        { x: 2, y: 1, color: "yellow" },
-        { x: 4, y: 0, color: "yellow" },
-        { x: 4, y: 2, color: "cyan" },
-       { x: 0, y: 3, color: "cyan" }
-    ]
+        { x: 1, y: 4, color: "green" },
+        { x: 3, y: 1, color: "green" },
+        { x: 0, y: 2, color: "yellow" },
+        { x: 4, y: 4, color: "yellow" },
+        { x: 0, y: 4, color: "blue" },
+        { x: 1, y: 1, color: "blue" },
+        { x: 2, y: 1, color: "purple" }, 
+        { x: 2, y: 3, color: "purple" } 
+    ],
 ];
 
 
