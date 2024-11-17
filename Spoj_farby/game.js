@@ -16,9 +16,9 @@ const messageDisplay = document.getElementById("messageDisplay");
 
 const fixedLevel = [
     [
-        { x: 0, y: 0, color: "yellow" },
+        { x: 0, y: 0, color: "purple" },
         { x: 1, y: 0, color: "green" },
-        { x: 0, y: 1, color: "yellow" },
+        { x: 0, y: 1, color: "purple" },
         { x: 1, y: 1, color: "green" }
     ]
 ];
