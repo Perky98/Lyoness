@@ -2,7 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Comic Sans MS", Arial, sans-serif;
     background-color:#FDD8D8;
 }
 
@@ -16,10 +16,10 @@ body {
 
 .game-container {
     text-align: center;
-   // background: #fff;
-    padding: 20px;
+  
+    padding: 0px;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
     width: 450px;
 }
 
@@ -41,12 +41,6 @@ canvas {
     margin-top: 10px;
 }
 
-.message {
-    display: none;
-    font-size: 1.4em;
-    color: green;
-    margin-top: 20px;
-    font-weight: bold;
-}
+
 
 	  
