@@ -11,15 +11,15 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-   
+    background-color: #f0f0f0;
 }
 
 .game-container {
     text-align: center;
-  
-   
+   // background: #fff;
+    padding: 20px;
     border-radius: 10px;
-   
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     width: 450px;
 }
 
@@ -41,6 +41,13 @@ canvas {
     margin-top: 10px;
 }
 
+.message {
+    display: none;
+    font-size: 1.4em;
+    color: green;
+    margin-top: 20px;
+    font-weight: bold;
+}
 
-
+	  
 	  
