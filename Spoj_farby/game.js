@@ -16,169 +16,169 @@ const messageDisplay = document.getElementById("messageDisplay");
 
 const fixedLevel = [
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 1, x: 0, color: "green" },
-        { y: 0, x: 1, color: "purple" },
-        { y: 1, x: 1, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 1, x: 0, color: "#1E9F25" },
+        { y: 0, x: 1, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" }
     ]
 ];
 
 const randomLevels = [
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 2, x: 0, color: "purple" },
-        { y: 1, x: 1, color: "green" },
-        { y: 2, x: 1, color: "blue" },
-        { y: 1, x: 2, color: "blue" },
-        { y: 0, x: 2, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 2, x: 0, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 2, x: 1, color: "#7DD0F6" },
+        { y: 1, x: 2, color: "#7DD0F6" },
+        { y: 0, x: 2, color: "#1E9F25" }
     ],
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 1, x: 2, color: "purple" },
-        { y: 1, x: 1, color: "green" },
-        { y: 2, x: 1, color: "blue" },
-        { y: 2, x: 2, color: "blue" },
-        { y: 2, x: 0, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 1, x: 2, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 2, x: 1, color: "#7DD0F6" },
+        { y: 2, x: 2, color: "#7DD0F6" },
+        { y: 2, x: 0, color: "#1E9F25" }
     ],
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 1, x: 2, color: "purple" },
-        { y: 1, x: 1, color: "green" },
-        { y: 2, x: 0, color: "blue" },
-        { y: 2, x: 2, color: "blue" },
-        { y: 1, x: 0, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 1, x: 2, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 2, x: 0, color: "#7DD0F6" },
+        { y: 2, x: 2, color: "#7DD0F6" },
+        { y: 1, x: 0, color: "#1E9F25" }
     ],
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 0, x: 1, color: "purple" },
-        { y: 2, x: 0, color: "blue" },
-        { y: 1, x: 1, color: "green" },
-        { y: 0, x: 2, color: "blue" },
-        { y: 1, x: 0, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 0, x: 1, color: "#784EEE" },
+        { y: 2, x: 0, color: "#7DD0F6" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 0, x: 2, color: "#7DD0F6" },
+        { y: 1, x: 0, color: "#1E9F25" }
     ],
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 2, x: 0, color: "blue" },
-        { y: 0, x: 2, color: "purple" },
-        { y: 1, x: 0, color: "green" },
-        { y: 2, x: 2, color: "blue" },
-        { y: 1, x: 2, color: "green" }
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 2, x: 0, color: "#7DD0F6" },
+        { y: 0, x: 2, color: "#784EEE" },
+        { y: 1, x: 0, color: "#1E9F25" },
+        { y: 2, x: 2, color: "#7DD0F6" },
+        { y: 1, x: 2, color: "#1E9F25" }
     ]
 ];
 
 // 3 level 
 const randomLevels3 = [
     [
-        { y: 1, x: 3, color: "purple" },
-        { y: 3, x: 1, color: "purple" },
-        { y: 2, x: 2, color: "green" },
-        { y: 0, x: 3, color: "green" },
-        { y: 1, x: 1, color: "yellow" },
-        { y: 2, x: 1, color: "yellow" },
-        { y: 0, x: 1, color: "blue" },
-        { y: 3, x: 0, color: "blue" } 
+        { y: 1, x: 3, color: "#784EEE" },
+        { y: 3, x: 1, color: "#784EEE" },
+        { y: 2, x: 2, color: "#1E9F25" },
+        { y: 0, x: 3, color: "#1E9F25" },
+        { y: 1, x: 1, color: "#F6E87D" },
+        { y: 2, x: 1, color: "#F6E87D" },
+        { y: 0, x: 1, color: "#7DD0F6" },
+        { y: 3, x: 0, color: "#7DD0F6" } 
     ],
    [
-        { y: 3, x: 3, color: "purple" },
-        { y: 3, x: 1, color: "purple" },
-        { y: 2, x: 1, color: "green" },
-        { y: 0, x: 3, color: "green" },
-        { y: 0, x: 0, color: "yellow" },
-        { y: 1, x: 2, color: "yellow" },
-        { y: 1, x: 1, color: "blue" },
-        { y: 3, x: 0, color: "blue" } 
+        { y: 3, x: 3, color: "#784EEE" },
+        { y: 3, x: 1, color: "#784EEE" },
+        { y: 2, x: 1, color: "#1E9F25" },
+        { y: 0, x: 3, color: "#1E9F25" },
+        { y: 0, x: 0, color: "#F6E87D" },
+        { y: 1, x: 2, color: "#F6E87D" },
+        { y: 1, x: 1, color: "#7DD0F6" },
+        { y: 3, x: 0, color: "#7DD0F6" } 
     ],
    [
-        { y: 0, x: 0, color: "purple" },
-        { y: 2, x: 1, color: "purple" },
-        { y: 1, x: 3, color: "green" },
-        { y: 0, x: 1, color: "green" },
-        { y: 1, x: 1, color: "yellow" },
-        { y: 2, x: 3, color: "yellow" },
-        { y: 3, x: 3, color: "blue" },
-        { y: 3, x: 0, color: "blue" } 
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 2, x: 1, color: "#784EEE" },
+        { y: 1, x: 3, color: "#1E9F25" },
+        { y: 0, x: 1, color: "#1E9F25" },
+        { y: 1, x: 1, color: "#F6E87D" },
+        { y: 2, x: 3, color: "#F6E87D" },
+        { y: 3, x: 3, color: "#7DD0F6" },
+        { y: 3, x: 0, color: "#7DD0F6" } 
     ],
    
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 1, x: 1, color: "green" },
-        { y: 2, x: 1, color: "purple" },
-        { y: 2, x: 3, color: "green" },
-        { y: 1, x: 2, color: "blue" },
-        { y: 3, x: 3, color: "blue" } 
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 2, x: 1, color: "#784EEE" },
+        { y: 2, x: 3, color: "#1E9F25" },
+        { y: 1, x: 2, color: "#7DD0F6" },
+        { y: 3, x: 3, color: "#7DD0F6" } 
     ],
     [
-        { y: 0, x: 0, color: "purple" },
-        { y: 1, x: 1, color: "green" },
-        { y: 2, x: 1, color: "purple" },
-        { y: 0, x: 3, color: "green" },
-        { y: 3, x: 2, color: "blue" },
-        { y: 3, x: 3, color: "blue" } 
+        { y: 0, x: 0, color: "#784EEE" },
+        { y: 1, x: 1, color: "#1E9F25" },
+        { y: 2, x: 1, color: "#784EEE" },
+        { y: 0, x: 3, color: "#1E9F25" },
+        { y: 3, x: 2, color: "#7DD0F6" },
+        { y: 3, x: 3, color: "#7DD0F6" } 
     ]
 ];
 //4 level
 const randomLevels4 = [
     [
-        { y: 0, x: 3, color: "lightgreen" },
-        { y: 4, x: 3, color: "lightgreen" },
-        { y: 1, x: 3, color: "green" },
-        { y: 2, x: 2, color: "green" },
-        { y: 3, x: 3, color: "yellow" },
-        { y: 4, x: 2, color: "yellow" },
-        { y: 0, x: 2, color: "blue" },
-        { y: 4, x: 0, color: "blue" },
-        { y: 0, x: 1, color: "purple" }, 
-        { y: 0, x: 0, color: "purple" } 
+        { y: 0, x: 3, color: "#4EEE90" },
+        { y: 4, x: 3, color: "#4EEE90" },
+        { y: 1, x: 3, color: "#1E9F25" },
+        { y: 2, x: 2, color: "#1E9F25" },
+        { y: 3, x: 3, color: "#F6E87D" },
+        { y: 4, x: 2, color: "#F6E87D" },
+        { y: 0, x: 2, color: "#7DD0F6" },
+        { y: 4, x: 0, color: "#7DD0F6" },
+        { y: 0, x: 1, color: "#784EEE" }, 
+        { y: 0, x: 0, color: "#784EEE" } 
     ],
      [
-        { y: 0, x: 4, color: "lightgreen" },
-        { y: 1, x: 1, color: "lightgreen" },
-        { y: 1, x: 4, color: "green" },
-        { y: 0, x: 1, color: "green" },
-        { y: 3, x: 3, color: "yellow" },
-        { y: 3, x: 1, color: "yellow" },
-        { y: 3, x: 0, color: "purple" }, 
-        { y: 2, x: 4, color: "purple" } 
+        { y: 0, x: 4, color: "#4EEE90" },
+        { y: 1, x: 1, color: "#4EEE90" },
+        { y: 1, x: 4, color: "#1E9F25" },
+        { y: 0, x: 1, color: "#1E9F25" },
+        { y: 3, x: 3, color: "#F6E87D" },
+        { y: 3, x: 1, color: "#F6E87D" },
+        { y: 3, x: 0, color: "#784EEE" }, 
+        { y: 2, x: 4, color: "#784EEE" } 
     ],
 [
-        { y: 0, x: 4, color: "green" },
-        { y: 4, x: 2, color: "green" },
-        { y: 2, x: 1, color: "yellow" },
-        { y: 4, x: 1, color: "yellow" },
-        { y: 2, x: 2, color: "blue" },
-        { y: 4, x: 0, color: "blue" },
-        { y: 3, x: 2, color: "purple" }, 
-        { y: 0, x: 0, color: "purple" } 
+        { y: 0, x: 4, color: "#1E9F25" },
+        { y: 4, x: 2, color: "#1E9F25" },
+        { y: 2, x: 1, color: "#F6E87D" },
+        { y: 4, x: 1, color: "#F6E87D" },
+        { y: 2, x: 2, color: "#7DD0F6" },
+        { y: 4, x: 0, color: "#7DD0F6" },
+        { y: 3, x: 2, color: "#784EEE" }, 
+        { y: 0, x: 0, color: "#784EEE" } 
     ],
 [
-        { y: 0, x: 1, color: "green" },
-        { y: 4, x: 2, color: "green" },
-        { y: 1, x: 2, color: "yellow" },
-        { y: 4, x: 1, color: "yellow" },
-        { y: 2, x: 0, color: "blue" },
-        { y: 4, x: 0, color: "blue" },
-        { y: 2, x: 2, color: "purple" }, 
-        { y: 0, x: 0, color: "purple" } 
+        { y: 0, x: 1, color: "#1E9F25" },
+        { y: 4, x: 2, color: "#1E9F25" },
+        { y: 1, x: 2, color: "#F6E87D" },
+        { y: 4, x: 1, color: "#F6E87D" },
+        { y: 2, x: 0, color: "#7DD0F6" },
+        { y: 4, x: 0, color: "#7DD0F6" },
+        { y: 2, x: 2, color: "#784EEE" }, 
+        { y: 0, x: 0, color: "#784EEE" } 
     ],
 [
-        { y: 0, x: 3, color: "green" },
-        { y: 4, x: 2, color: "green" },
-        { y: 1, x: 3, color: "yellow" },
-        { y: 4, x: 1, color: "yellow" },
-        { y: 1, x: 2, color: "blue" },
-        { y: 4, x: 0, color: "blue" },
-        { y: 2, x: 2, color: "purple" }, 
-        { y: 1, x: 1, color: "purple" } 
+        { y: 0, x: 3, color: "#1E9F25" },
+        { y: 4, x: 2, color: "#1E9F25" },
+        { y: 1, x: 3, color: "#F6E87D" },
+        { y: 4, x: 1, color: "#F6E87D" },
+        { y: 1, x: 2, color: "#7DD0F6" },
+        { y: 4, x: 0, color: "#7DD0F6" },
+        { y: 2, x: 2, color: "#784EEE" }, 
+        { y: 1, x: 1, color: "#784EEE" } 
     ],
     [
-        { y: 1, x: 4, color: "green" },
-        { y: 3, x: 1, color: "green" },
-        { y: 0, x: 2, color: "yellow" },
-        { y: 4, x: 4, color: "yellow" },
-        { y: 0, x: 4, color: "blue" },
-        { y: 1, x: 1, color: "blue" },
-        { y: 2, x: 1, color: "purple" }, 
-        { y: 2, x: 3, color: "purple" } 
+        { y: 1, x: 4, color: "#1E9F25" },
+        { y: 3, x: 1, color: "#1E9F25" },
+        { y: 0, x: 2, color: "#F6E87D" },
+        { y: 4, x: 4, color: "#F6E87D" },
+        { y: 0, x: 4, color: "#7DD0F6" },
+        { y: 1, x: 1, color: "#7DD0F6" },
+        { y: 2, x: 1, color: "#784EEE" }, 
+        { y: 2, x: 3, color: "#784EEE" } 
     ],
 ];
 
@@ -396,7 +396,6 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-
 
 
 
