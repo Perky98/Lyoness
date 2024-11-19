@@ -16,9 +16,9 @@ const messageDisplay = document.getElementById("messageDisplay");
 
 const fixedLevel = [
     [
-        { y: 0, x: 0, color: "purple" },
+        { y: 0, x: 0, color: "#784EEE" },
         { y: 1, x: 0, color: "green" },
-        { y: 0, x: 1, color: "purple" },
+        { y: 0, x: 1, color: "#784EEE" },
         { y: 1, x: 1, color: "green" }
     ]
 ];
@@ -223,7 +223,7 @@ function updateLevelDisplay() {
 
 function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#ddd";
+    ctx.strokeStyle = "#F9B2B3";
     for (let i = 0; i <= gridSize; i++) {
         ctx.beginPath();
         ctx.moveTo(i * cellSize, 0);
