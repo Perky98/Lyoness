@@ -264,18 +264,19 @@ function handleMouseDown(event) {
 
 function handleMouseMove(event) {
     if (!startCell) return;
+
     const cell = getCell(event.offsetX, event.offsetY);
     const lastPath = paths[paths.length - 1];
     const lastCell = lastPath.path[lastPath.path.length - 1];
 
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
-        if (isIntersecting(cell, lastPath)) {
-            showMessage("Path intersects with an existing path or point.");
-            paths.pop();
-            drawGrid();
-            drawPoints();
-            drawPaths();
+        if (completedConnections.includes(`${cell.x}-${cell.y}-${lastPath.color}`)) {
+            showMessage("Path already complete!");
             startCell = null;
+            return;
+        }
+
+        if (isIntersecting(cell, lastPath)) {
             return;
         }
 
@@ -286,6 +287,7 @@ function handleMouseMove(event) {
     }
 }
 
+
 function handleMouseUp() {
     if (!startCell) return;
     const lastPath = paths[paths.length - 1];
@@ -295,6 +297,9 @@ function handleMouseUp() {
         for (const cell of lastPath.path) {
             completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
         }
+        drawGrid();
+        drawPoints();
+        drawPaths();
     } else {
         showMessage("Path not complete!");
         paths.pop();
@@ -303,10 +308,10 @@ function handleMouseUp() {
         drawPaths();
     }
 
+    // End the path drawing
     startCell = null;
 
     if (checkWin()) {
-       // alert("Level complete!");
         level++;
         if (level < 4) {
             initGame();
@@ -317,25 +322,33 @@ function handleMouseUp() {
     }
 }
 
+
 function isValidMove(from, to) {
-    return Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1;
+    return (
+        Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1 &&
+        to.x >= 0 && to.x < gridSize &&
+        to.y >= 0 && to.y < gridSize
+    );
 }
 
+
 function isIntersecting(cell, currentPath) {
-    for (const path of paths) {
+    for (let i = 0; i < paths.length; i++) {
+        const path = paths[i];
         if (path !== currentPath) {
             if (path.path.some(p => p.x === cell.x && p.y === cell.y && path.color !== currentPath.color)) {
-                return true;
+               
+                paths.splice(i, 1);
+                drawGrid();
+                drawPoints();
+                drawPaths();
+                return false; 
             }
-        }
-    }
-    for (const point of levels) {
-        if (point.x === cell.x && point.y === cell.y && point.color !== currentPath.color) {
-            return true;
         }
     }
     return false;
 }
+
 
 function checkConnectionComplete(path, color) {
     const pointsOfColor = levels.filter(p => p.color === color);
@@ -396,7 +409,6 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-
 
 
 
