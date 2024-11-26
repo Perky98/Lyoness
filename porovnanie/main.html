@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porovnanie obrázkov</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="introScreen" style="display: none; text-align: center;">
+        <h1>Vitaj v hre!</h1>
+        <p id="lastScoreText">Tvoje posledné skóre: 0</p>
+        <button onclick="startNewGame()">Spustiť hru</button>
+    </div>
+
+    
+    <div id="gameScreen" style="display: none;">
+        <div class="resultPanel">
+            <div id="result"></div>
+            <p>Body: <span id="score">0</span></p>
+            <p>Čas: <span id="timer">60</span> sekúnd</p>
+        </div>
+        <div id="imageContainer"></div>
+        <div class="gamePanel">
+            <button onclick="checkSame(true)" id="sameBtn" disabled>Rovnaké</button>
+            <button onclick="checkSame(false)" id="diffBtn" disabled>Rôzne</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
