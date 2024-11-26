@@ -11,7 +11,84 @@ body {
     overflow: hidden;
 }
 
-/* Заголовок игры (Уровень и Очки) */
+/* Стартовый экран */
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    color: #333;
+}
+
+.title-banner {
+    background: #ffa726;
+    color: white;
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    text-align: center;
+    display: inline-block;
+    font-size: 2em;
+    font-weight: bold;
+    position: relative;
+    color: #3d1a00;
+    border: 2px solid #e68a00;
+}
+
+.menu-options ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-options li {
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu-options button {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    text-align: center;
+}
+
+.menu-options button:hover {
+    background: #45a049;
+}
+
+.menu-options button:active {
+    background: #388e3c;
+}
+
+/* Игра */
+.game-container {
+    text-align: center;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+}
+
 .game-header {
     width: 100%;
     padding: 10px 20px;
@@ -38,22 +115,6 @@ body {
     margin: 0 20px;
 }
 
-/* Контейнер для игры */
-.game-container {
-    text-align: center;
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 80px; /* Оставляем место для фиксированного заголовка */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Сетка */
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Сетка 4x4 */
@@ -63,7 +124,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Стили для плиток */
 .grid-item {
     background: #FDAC66;
     border-radius: 8px;
@@ -76,7 +136,6 @@ body {
     position: relative;
 }
 
-/* Подсвеченная плитка */
 .grid-item.active {
     background: #FDF866; /* Плитка, которая подсвечивается во время игры */
 }
@@ -106,26 +165,15 @@ body {
     pointer-events: none;
 }
 
-/* Сообщение об ошибке */
 #game-over-message {
     font-size: 1.2em;
     font-weight: bold;
     color: red;
     display: none;
-    margin-top: 10px;
 }
 
-#game-over-message.hidden {
-    display: none;
-}
-
-/* Кнопка перезапуска */
 footer {
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
 }
 
 footer button {
