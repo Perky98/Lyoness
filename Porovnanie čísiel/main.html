@@ -7,11 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div>
+    
+    <div id="introScreen" style="display: none; text-align: center;">
+        <h1>Vitaj v hre!</h1>
+        <p id="lastScoreText">Tvoje posledné skóre: 0</p>
+        <button onclick="startNewGame()">Spustiť hru</button>
+    </div>
+
+    
+    <div id="gameScreen" style="display: none;">
         <div class="resultPanel">
             <div id="result"></div>
             <p>Body: <span id="score">0</span></p>
-            <div id="incorrectAnswers"></div>
             <p>Čas: <span id="timer">60</span> sekúnd</p>
         </div>
         <div id="imageContainer"></div>
@@ -19,9 +26,8 @@
             <button onclick="checkSame(true)" id="sameBtn" disabled>Rovnaké</button>
             <button onclick="checkSame(false)" id="diffBtn" disabled>Rôzne</button>
         </div>
-        <button onclick="startGame()" id="startBtn">Spustiť hru</button>
-        <div id="incorrectAnswers"></div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -3,11 +3,11 @@ let currentImage = null;
 let score = 0;
 let totalAttempts = 0;
 let incorrectAttempts = 0;
-let timeLeft = 60;
+let timeLeft = 60; 
 let timerInterval;
-let incorrectAnswers = [];
-let timePerDecision = 3000; 
 let decisionTimeout;
+let lastScore = null; 
+let timePerDecision = 5000; 
 
 const images = [
     "image1.jpg", 
@@ -37,7 +37,6 @@ function generateImage() {
     decisionTimeout = setTimeout(() => {
         totalAttempts++;
         incorrectAttempts++;
-        incorrectAnswers.push(`Obrázky boli ${previousImage === currentImage ? "rovnaké" : "rôzne"}, ale hráč nereagoval.`);
         document.getElementById('result').innerText = "Nereagoval si!";
         generateImage();
     }, timePerDecision);
@@ -53,13 +52,11 @@ function checkSame(isSame) {
         document.getElementById('result').innerText = "Správne!";
     } else {
         incorrectAttempts++;
-        incorrectAnswers.push(`Obrázky boli ${isActuallySame ? "rovnaké" : "rôzne"}, ale hráč odpovedal nesprávne.`);
         document.getElementById('result').innerText = "Nesprávne!";
     }
 
     document.getElementById('score').innerText = score;
 
-    timePerDecision = Math.max(1000, timePerDecision - 100);
     generateImage();
 }
 
@@ -75,39 +72,63 @@ function startTimer() {
     }, 1000);
 }
 
+function startGameWithDelay() {
+    // Zobrazenie úvodného obrázka na porovnávanie
+    previousImage = images[Math.floor(Math.random() * images.length)];
+    document.getElementById('imageContainer').innerHTML = `<img class="image-square" src="${previousImage}" alt="úvodný obrázok">`;
+    document.getElementById('result').innerText = "Hra začne o 5 sekúnd...";
+
+    // Po 5 sekundách začni hru
+    setTimeout(() => {
+        startGame();
+    }, 5000);
+}
+
 function startGame() {
     score = 0;
     totalAttempts = 0;
     incorrectAttempts = 0;
-    timeLeft = 60;
-    timePerDecision = 3000;
-    incorrectAnswers = [];
+    timeLeft = 60; // Reset časovača na 60 sekúnd
+    timePerDecision = 5000; // Reset času na rozhodnutie na 5 sekúnd
     document.getElementById('score').innerText = score;
     document.getElementById('timer').innerText = timeLeft;
     document.getElementById('result').innerText = "";
-    document.getElementById('incorrectAnswers').innerText = "";
 
     document.getElementById('sameBtn').disabled = false;
     document.getElementById('diffBtn').disabled = false;
-    document.getElementById('startBtn').disabled = true;
 
     generateImage();
     startTimer();
 }
 
 function endGame() {
+    clearInterval(timerInterval);
+    clearTimeout(decisionTimeout);
+
     document.getElementById('sameBtn').disabled = true;
     document.getElementById('diffBtn').disabled = true;
-    document.getElementById('startBtn').disabled = false;
 
     document.getElementById('result').innerText = `Čas vypršal! Tvoj výsledok: ${score}`;
-    document.getElementById('incorrectAnswers').innerHTML = `
-        <h3>Štatistika:</h3>
-        <p>Správne odpovede: ${score}</p>
-        <p>Nesprávne odpovede: ${incorrectAttempts} z ${totalAttempts}</p>
-        <h3>Nesprávne odpovede:</h3>
-        <ul>${incorrectAnswers.map(answer => `<li>${answer}</li>`).join('')}</ul>
-    `;
+    lastScore = score; // Uloženie skóre pre ďalšiu hru
+
+    setTimeout(showIntroScreen, 3000); // Počkajte 3 sekundy a zobrazte úvodnú obrazovku
 }
 
-window.onload = loadInitialImage;
+function showIntroScreen() {
+    document.getElementById("introScreen").style.display = "block";
+    document.getElementById("gameScreen").style.display = "none";
+
+    if (lastScore !== null) {
+        document.getElementById("lastScoreText").innerText = `Tvoje posledné skóre: ${lastScore}`;
+    }
+}
+
+function startNewGame() {
+    document.getElementById("introScreen").style.display = "none";
+    document.getElementById("gameScreen").style.display = "block";
+
+    startGameWithDelay(); // Spusti hru so zobrazením úvodného obrázka
+}
+
+// Po načítaní stránky ukáž úvodnú obrazovku
+window.onload = showIntroScreen;
