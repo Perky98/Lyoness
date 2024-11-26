@@ -1,72 +1,149 @@
+/* Общие стили */
 body {
-    font-family: "Comic Sans MS", Arial, sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 100vh;
-      background-image: url('background.png'); 
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            background-position: center; 
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    color: #333;
+    overflow: hidden;
 }
-h1 {
-    margin-bottom: 20px;
+
+/* Заголовок игры (Уровень и Очки) */
+.game-header {
+    width: 100%;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-#grid-container {
+
+.game-header .info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.game-header .info p {
+    margin: 0 20px;
+}
+
+/* Контейнер для игры */
+.game-container {
+    text-align: center;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 80px; /* Оставляем место для фиксированного заголовка */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Сетка */
+.grid {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
-    grid-template-rows: repeat(4, 100px);
+    grid-template-columns: repeat(4, 1fr); /* Сетка 4x4 */
+    grid-template-rows: repeat(4, 1fr);    /* Сетка 4x4 */
     gap: 10px;
+    justify-content: center;
     margin-bottom: 20px;
 }
+
+/* Стили для плиток */
 .grid-item {
-    width: 100px;
-    height: 100px;
-    background-color: #FDAC66;
-    border: 2px solid #ddd;
+    background: #FDAC66;
+    border-radius: 8px;
+    aspect-ratio: 1; /* Делаем плитки квадратными */
+    transition: background 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    position: relative;
 }
+
+/* Подсвеченная плитка */
 .grid-item.active {
-    background-color: #ffeb3b;
+    background: #FDF866; /* Плитка, которая подсвечивается во время игры */
 }
+
+/* Плитка при клике */
 .grid-item.clicked {
-    background-color: #79D7AD;
+    background: #79D7AD; /* Цвет обратной связи при клике */
 }
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    background-color: #FDAC66;
-    color: white;
-    transition: background-color 0.3s ease;
+
+/* Неправильная плитка */
+.grid-item.wrong {
+    background:#FD666B; /* Красный цвет для неправильной плитки */
 }
-button:hover {
-    background-color: #FDAC66;
-}
-.info {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-around;
-    width: 300px;
-}
-.game-over-message {
-    display: none;
-    position: fixed;
+
+/* Стиль для отображения порядкового номера на правильной плитке */
+.number-overlay {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ff3b3b;
+    background: #ffffff;
+    color: #f44336;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 5px 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+/* Сообщение об ошибке */
+#game-over-message {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: red;
+    display: none;
+    margin-top: 10px;
+}
+
+#game-over-message.hidden {
+    display: none;
+}
+
+/* Кнопка перезапуска */
+footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+footer button {
+    background: #4caf50;
     color: white;
-    padding: 20px;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
     border-radius: 5px;
-    text-align: center;
-    font-size: 18px;
-    z-index: 10;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+footer button:hover {
+    background: #45a049;
+}
+
+footer button:active {
+    background: #388e3c;
 }
