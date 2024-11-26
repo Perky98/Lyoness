@@ -1,29 +1,44 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра на память</title>
-    <link rel="stylesheet" href="style.css"> 
-    <script defer src="game.js"></script>
+    <title>Hra - Zopakuj postupnosť</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-     <div class="game-header">
-    <div class="info">
-        <p>Úroveň: <span id="level">1</span></p>
-        <p>Skóre: <span id="score">0</span></p>
-    </div>
-</div>
 
-<div class="game-container">
-    <div class="grid" id="grid-container">
+    <!-- Стартовый экран -->
+    <div id="start-screen">
+        <div class="title-banner">
+            <h1>Zopakuj postupnosť</h1>
         </div>
-    <div id="game-over-message"></div>
-</div>
+        <div class="menu-options">
+            <ul>
+                <li><button id="start-btn">Štart</button></li>
+                <li><button id="exit-btn">Koniec</button></li>
+            </ul>
+        </div>
+    </div>
 
-<footer>
-    <button id="restart-btn">Reštartovať</button>
-</footer>
+    <!-- Игра -->
+    <div class="game-container" style="display: none;">
+        <div class="game-header">
+            <div class="info">
+                <p>Level: <span id="level">1</span></p>
+                <p>Skóre: <span id="score">0</span></p>
+            </div>
+        </div>
+        
+        <div id="game-over-message" class="hidden">Koniec hry! Dosiahol(a) si level <span id="final-level"></span> so skóre <span id="final-score"></span>.</div>
 
+        <div id="grid-container" class="grid"></div>
+
+        <footer>
+            <button id="restart-btn">Znova</button>
+        </footer>
+    </div>
+
+    <script src="game.js"></script>
 </body>
 </html>
