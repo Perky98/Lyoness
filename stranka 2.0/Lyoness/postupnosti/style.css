@@ -1,0 +1,197 @@
+/* Общие стили */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    color: #333;
+    overflow: hidden;
+}
+
+/* Стартовый экран */
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    color: #333;
+}
+
+.title-banner {
+    background: #ffa726;
+    color: white;
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    text-align: center;
+    display: inline-block;
+    font-size: 2em;
+    font-weight: bold;
+    position: relative;
+    color: #3d1a00;
+    border: 2px solid #e68a00;
+}
+
+.menu-options ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-options li {
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu-options button {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    text-align: center;
+}
+
+.menu-options button:hover {
+    background: #45a049;
+}
+
+.menu-options button:active {
+    background: #388e3c;
+}
+
+/* Игра */
+.game-container {
+    text-align: center;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+}
+
+.game-header {
+    width: 100%;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-header .info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.game-header .info p {
+    margin: 0 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Сетка 4x4 */
+    grid-template-rows: repeat(4, 1fr);    /* Сетка 4x4 */
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.grid-item {
+    background: #FDAC66;
+    border-radius: 8px;
+    aspect-ratio: 1; /* Делаем плитки квадратными */
+    transition: background 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.grid-item.active {
+    background: #FDF866; /* Плитка, которая подсвечивается во время игры */
+}
+
+/* Плитка при клике */
+.grid-item.clicked {
+    background: #79D7AD; /* Цвет обратной связи при клике */
+}
+
+/* Неправильная плитка */
+.grid-item.wrong {
+    background:#FD666B; /* Красный цвет для неправильной плитки */
+}
+
+/* Стиль для отображения порядкового номера на правильной плитке */
+.number-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    color: #f44336;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 5px 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+#game-over-message {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: red;
+    display: none;
+}
+
+footer {
+    margin-top: 20px;
+}
+
+footer button {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+footer button:hover {
+    background: #45a049;
+}
+
+footer button:active {
+    background: #388e3c;
+}
