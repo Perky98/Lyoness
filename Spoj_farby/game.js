@@ -112,7 +112,9 @@ const randomLevels3 = [
         { y: 1, x: 1, color: "#1E9F25" },
         { y: 2, x: 1, color: "#784EEE" },
         { y: 0, x: 3, color: "#1E9F25" },
-        { y: 3, x: 2, color: "#7DD0F6" },
+        { y: 1, x: 2, color: "#4EEE90" },
+        { y: 3, x: 0, color: "#4EEE90" },
+        { y: 1, x: 3, color: "#7DD0F6" },
         { y: 3, x: 3, color: "#7DD0F6" } 
     ]
 ];
@@ -182,7 +184,67 @@ const randomLevels4 = [
     ],
 ];
 
-
+const randomLevels5 = [
+    [
+        { y: 0, x: 2, color: "#4EEE90" },
+        { y: 2, x: 5, color: "#4EEE90" },
+        { y: 3, x: 5, color: "#1E9F25" },
+        { y: 4, x: 1, color: "#1E9F25" },
+        { y: 3, x: 4, color: "#F6E87D" },
+        { y: 5, x: 0, color: "#F6E87D" },
+        { y: 3, x: 3, color: "#7DD0F6" },
+        { y: 1, x: 0, color: "#7DD0F6" },
+        { y: 2, x: 4, color: "#784EEE" }, 
+        { y: 0, x: 0, color: "#784EEE" } 
+    ],
+     [
+        { y: 4, x: 2, color: "#4EEE90" },
+        { y: 2, x: 5, color: "#4EEE90" },
+        { y: 4, x: 4, color: "#1E9F25" },
+        { y: 2, x: 2, color: "#1E9F25" },
+        { y: 3, x: 5, color: "#F6E87D" },
+        { y: 5, x: 0, color: "#F6E87D" },
+        { y: 4, x: 3, color: "#7DD0F6" },
+        { y: 1, x: 1, color: "#7DD0F6" },
+        { y: 0, x: 5, color: "#784EEE" }, 
+        { y: 0, x: 3, color: "#784EEE" } 
+    ],
+[       { y: 4, x: 2, color: "#4EEE90" },
+        { y: 1, x: 5, color: "#4EEE90" },
+        { y: 2, x: 5, color: "#1E9F25" },
+        { y: 4, x: 4, color: "#1E9F25" },
+        { y: 5, x: 0, color: "#F6E87D" },
+        { y: 0, x: 5, color: "#F6E87D" },
+        { y: 1, x: 1, color: "#7DD0F6" },
+        { y: 5, x: 5, color: "#7DD0F6" },
+        { y: 3, x: 4, color: "#784EEE" }, 
+        { y: 4, x: 5, color: "#784EEE" } 
+    ],
+[
+        { y: 4, x: 3, color: "#4EEE90" },
+        { y: 1, x: 5, color: "#4EEE90" },
+        { y: 5, x: 1, color: "#1E9F25" },
+        { y: 2, x: 5, color: "#1E9F25" },
+        { y: 0, x: 2, color: "#F6E87D" },
+        { y: 5, x: 0, color: "#F6E87D" },
+        { y: 1, x: 1, color: "#7DD0F6" },
+        { y: 5, x: 0, color: "#7DD0F6" },
+        { y: 3, x: 2, color: "#784EEE" }, 
+        { y: 4, x: 4, color: "#784EEE" } 
+    ],
+ 
+    [
+        { y: 2, x: 4, color: "#4EEE90" },
+        { y: 5, x: 4, color: "#4EEE90" },
+        { y: 5, x: 5, color: "#1E9F25" },
+        { y: 0, x: 3, color: "#1E9F25" },
+        { y: 2, x: 2, color: "#F6E87D" },
+        { y: 4, x: 1, color: "#F6E87D" },
+        { y: 4, x: 0, color: "#7DD0F6" },
+        { y: 3, x: 1, color: "#7DD0F6" }
+     
+    ],
+];
 function initGame() {
     paths = [];
     completedConnections = [];
@@ -223,7 +285,7 @@ function updateLevelDisplay() {
 
 function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#ddd";
+    ctx.strokeStyle = "#F9B2B3";
     for (let i = 0; i <= gridSize; i++) {
         ctx.beginPath();
         ctx.moveTo(i * cellSize, 0);
@@ -409,6 +471,5 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-
 
 
