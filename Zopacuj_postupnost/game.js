@@ -9,8 +9,10 @@ const levelText = document.getElementById('level');
 const scoreText = document.getElementById('score');
 const restartBtn = document.getElementById('restart-btn');
 const gameOverMessage = document.getElementById('game-over-message');
+const finalLevel = document.getElementById('final-level');
+const finalScore = document.getElementById('final-score');
 
-for (let i = 0; i < 16; i++) { 
+for (let i = 0; i < 16; i++) {
     const square = document.createElement('div');
     square.classList.add('grid-item');
     square.setAttribute('data-id', i);
@@ -18,7 +20,16 @@ for (let i = 0; i < 16; i++) {
     gridContainer.appendChild(square);
 }
 
-startGame();
+document.getElementById('start-btn').addEventListener('click', function () {
+    document.getElementById('start-screen').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'block';
+    startGame();
+});
+
+document.getElementById('exit-btn').addEventListener('click', function () {
+    alert('Hra bola ukončená.');
+});
+
 restartBtn.addEventListener('click', restartGame);
 
 function startGame() {
@@ -54,7 +65,7 @@ function flashSequence() {
     });
 
     setTimeout(() => {
-        clickable = true; 
+        clickable = true;
     }, delay * (sequence.length + 1));
 }
 
@@ -72,9 +83,9 @@ function handlePlayerClick(e) {
     const tileId = parseInt(e.target.getAttribute('data-id'));
     playerSequence.push(tileId);
 
-    
+    // Проверка правильности нажатия
     if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
-        showMistake(tileId); 
+        showMistake(tileId); // Покажем ошибку
         displayGameOver();
         return;
     }
@@ -84,7 +95,7 @@ function handlePlayerClick(e) {
         e.target.classList.remove('clicked');
     }, 300);
 
-
+    // Если игрок правильно нажал все плитки последовательности
     if (playerSequence.length === sequence.length) {
         score += 10 * level;
         level++;
@@ -92,45 +103,38 @@ function handlePlayerClick(e) {
         setTimeout(nextLevel, 1000); 
     }
 }
-
+function displayGameOver() {
+    gameOverMessage.style.display = 'block';
+    finalLevel.textContent = level - 1;
+    finalScore.textContent = score;
+}
 function showMistake(wrongTileId) {
-   
+    // Покрасить неправильную плитку в красный
     const wrongTile = document.querySelector(`[data-id='${wrongTileId}']`);
     wrongTile.classList.add('wrong');
 
-    
-    const correctTileId = sequence[playerSequence.length - 1]; 
+    // Найти правильную плитку и показать на ней порядковый номер
+    const correctTileId = sequence[playerSequence.length - 1]; // Правильная плитка
     const correctTile = document.querySelector(`[data-id='${correctTileId}']`);
     
-   
+    // Добавить порядковый номер на правильной плитке
     const number = document.createElement('div');
     number.classList.add('number-overlay');
-    number.innerText = playerSequence.length; 
+    number.innerText = playerSequence.length; // Порядковый номер в последовательности
     correctTile.appendChild(number);
 }
 
 function updateScoreAndLevel() {
-    levelText.innerText = level;
-    scoreText.innerText = score;
+    levelText.textContent = level;
+    scoreText.textContent = score;
 }
 
 function clearGrid() {
-    document.querySelectorAll('.grid-item').forEach(item => {
-        item.classList.remove('active', 'clicked', 'wrong');
-       
-        const numberOverlay = item.querySelector('.number-overlay');
-        if (numberOverlay) {
-            numberOverlay.remove();
-        }
-    });
+    const gridItems = document.querySelectorAll('.grid-item');
+    gridItems.forEach(item => item.classList.remove('active', 'clicked'));
 }
 
 function restartGame() {
     resetGame();
     startGame();
-}
-
-function displayGameOver() {
-    gameOverMessage.innerText = `Uncorect answer! You pass  ${level} with ${score} points.`;
-    gameOverMessage.style.display = "block";
 }
