@@ -263,6 +263,8 @@ function initGame() {
         levels = getRandomLevel(randomLevels3);
     } else if (level === 3) {
         levels = getRandomLevel(randomLevels4);
+    }else if (level === 4) {
+        levels = getRandomLevel(randomLevels5);
     }
     drawGrid();
     drawPoints();
@@ -375,7 +377,7 @@ function handleMouseUp() {
 
     if (checkWin()) {
         level++;
-        if (level < 4) {
+        if (level < 5) {
             initGame();
         } else {
             showCompletionMessage();
