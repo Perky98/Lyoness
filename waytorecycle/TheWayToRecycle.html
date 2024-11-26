@@ -3,174 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprite Moving Game with Background and Click Interaction</title>
+    <title>Stickman Trash Sorting Game</title>
     <style>
-        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; flex-direction: column; }
         canvas { background: #f0f0f0; border: 2px solid #333; }
+        #restartButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="900" height="600"></canvas>
+    <button id="restartButton" onclick="restartGame()">Restart Game</button>
 
     <script>
-        // Select the canvas and set up the context
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Load the background image
         const backgroundImage = new Image();
-        backgroundImage.src = "TTRmapa1.png"; // Replace with your background image URL
-
-        // Load the sprite image
-        const sprite = new Image();
-        sprite.src = "panak1.png"; // Replace with your sprite image URL
-
-        // Load the arrow image
         const arrow = new Image();
-        arrow.src = "arrow.png"; // Replace with your arrow image URL
+        const gStickman = new Image();
+        const yStickman = new Image();
+        const bStickman = new Image();
 
-        // Initial position of the sprite and initial target
-        let spriteX = 95;
-        let spriteY = 85;
-        let initialTargetX = 240;
-        let initialTargetY = 180;
+        let imagesLoaded = 0;
+        const totalImages = 5; 
 
-        // ---------------------------1 odbocka KU KOSU
-        const secondTargetX = 477;   
-        const secondTargetY = 180;
-        // ---------------------------1 rovna 
-        const clickTargetX = 550;
-        const clickTargetY = 400;
-        // -----------------------------------------------------------
+        backgroundImage.src = "TTRmapa1.png"; 
+        arrow.src = "arrow.png"; 
+        gStickman.src = "panak1g.png"; 
+        yStickman.src = "panak2y.png"; 
+        bStickman.src = "panak3b.png"; 
 
-
-        // Current target position variables
-        let targetX = initialTargetX;
-        let targetY = initialTargetY;
-
-        // Speed of the sprite
-        const speed = 1;
-
-        // Variables for direction
-        let unitX, unitY;
-
-        // Flags to track visibility of the arrows
-        let showFirstArrow = true;
-        let showSecondArrow = false;
-
-        // Function to update direction to the target
-        function updateDirection() {
-            const dx = targetX - spriteX;
-            const dy = targetY - spriteY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            unitX = dx / distance;
-            unitY = dy / distance;
+        // cakaj na load imgs
+        function checkImagesLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === totalImages) {
+                gameStart();
+            }
         }
 
-        // Initialize direction
-        updateDirection();
+        backgroundImage.onload = checkImagesLoaded;
+        arrow.onload = checkImagesLoaded;
+        gStickman.onload = checkImagesLoaded;
+        yStickman.onload = checkImagesLoaded;
+        bStickman.onload = checkImagesLoaded;
 
-        // Animation loop
-        function gameLoop() {
-            // Draw the background
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-
-            // Draw the sprite at its current position
-            ctx.drawImage(sprite, spriteX, spriteY, 30, 50);
-
-            // Move the sprite towards the target position
-            if (Math.abs(spriteX - targetX) > 1 || Math.abs(spriteY - targetY) > 1) {
-                spriteX += unitX * speed;
-                spriteY += unitY * speed;
-            } else {
-                // Check if the sprite reached the first target, then set the next target
-                if (targetX === initialTargetX && targetY === initialTargetY) {
-                    targetX = secondTargetX;
-                    targetY = secondTargetY;
-                    updateDirection(); // Update direction to move towards the second target
-                }
-            }
-
-            // Draw the transparent green circle button
-            drawCircleButton();
-
-            // Draw arrows if visible
-            if (showFirstArrow) {
-                ctx.drawImage(arrow, 250, 200, 40, 40); // Position of first arrow
-            }
-
-            if (showSecondArrow) {
-                // Save the current context state
-                ctx.save();
-
-                // Rotate the canvas 90 degrees to make the arrow point downward
-                ctx.translate(266 , 233 ); // Move to arrow center
-                ctx.rotate(45); // Rotate 90 degrees (down)
-                ctx.drawImage(arrow, -20, -20, 40, 40); // Draw the arrow
-                ctx.restore(); // Restore the canvas context to the previous state
-            }
-
-            // Request the next frame
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Function to draw the circular button
-        function drawCircleButton() {
-            const buttonX = 250; // X position of the button
-            const buttonY = 220; // Y position of the button
-            const buttonRadius = 55; // Radius of the button
-
-            // Draw a transparent green circle
-            ctx.fillStyle = "rgba(22, 188, 22, 0.3)"; // Green with 50% transparency
+       /*
+       function nakresliCestu() {
+    ctx.fillStyle = "grey";
+    roads.forEach(road => {
+        ctx.save();
+        ctx.translate(road.bodX, road.bodY);
+        ctx.rotate(road.angle);
+        ctx.fillRect(-segmentLength / 2, -roadWidth / 2, segmentLength, roadWidth);
+        ctx.restore();
+        if (road.rotating) {
             ctx.beginPath();
-            ctx.arc(buttonX, buttonY, buttonRadius, 0, Math.PI * 2);
+            ctx.arc(road.bodX, road.bodY, junctionRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(0, 255, 0, 0.3)";
             ctx.fill();
-            ctx.closePath();
+        }
+    });
+}
+       */
+
+/*
+        function restartGame() {  ==============================================================================RESTART
+            stickmen.length = 0;
+            Uspesnost = 0;
+            pCount = 0;
+            spawnCooldown = 5000;
+            lastSpawnTime = 0;
+            spawnStickman(); 
+        }*/
+
+        function gameStart() {
+            const colors = ["g", "y", "b"]; 
+            const stickmanImages = {
+                g: gStickman,
+                y: yStickman,
+                b: bStickman
+            };
+
+            const trashBins = {
+                g: { x: 477, y: 170 },
+                y: { x: 640, y: 345 },
+                b: { x: 590, y: 485 }
+            };
+
+            const stickmen = [];
+            const crossroads = [
+                { x: 250, y: 210, radius: 55, arrowDirection: "down" }, // prva k zobraz
+                { x: 480, y: 380, radius: 55, arrowDirection: "down" } //druha k zobraz
+            ];
+
+            let Uspesnost = 0;
+            const speed = 1;
+            let pCount = 0; 
+            const maxP = 50; 
+            let spawnCooldown = 5000; 
+            let cooldownDecreaseInterval = 1000; 
+            let lastSpawnTime = 0; 
+
+            function calculateDirection(fromX, fromY, toX, toY) {
+                const dx = toX - fromX;
+                const dy = toY - fromY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                return { unitX: dx / distance, unitY: dy / distance };
+            }
+
+            function updateStickmanDirection(stickman, targetX, targetY) {
+                const direction = calculateDirection(stickman.x, stickman.y, targetX, targetY);
+                stickman.unitX = direction.unitX;
+                stickman.unitY = direction.unitY;
+            }
+
+            function spawnStickman() {
+                if (pCount >= maxP) return; //50staci
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const stickman = {
+                    x: 95,
+                    y: 75, 
+                    color: color,
+                    targetX: 240,
+                    targetY: 170,
+                    finalTargetX: trashBins[color].x,
+                    finalTargetY: trashBins[color].y,
+                    finalTargetColor: color,
+                    reached: false,
+                    currentCrossroad: 0 
+                };
+                updateStickmanDirection(stickman, stickman.targetX, stickman.targetY);
+                stickmen.push(stickman);
+                pCount++; 
+
+                //narocnost
+                if (spawnCooldown > 1000) { 
+                    spawnCooldown -= 80; 
+                }
+                
+                setTimeout(spawnStickman, spawnCooldown);
+            }
+
+            function gameLoop() {
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+    for (let i = stickmen.length - 1; i >= 0; i--) {
+        const stickman = stickmen[i];
+
+        if (!stickman.reached) {
+            stickman.x += stickman.unitX * speed;
+            stickman.y += stickman.unitY * speed;
+
+            if (Math.abs(stickman.x - stickman.targetX) < 2 && Math.abs(stickman.y - stickman.targetY) < 2) {
+                stickman.reached = true;
+
+                if (stickman.targetX === 240 && stickman.targetY === 170) {
+                    if (crossroads[0].arrowDirection === "down") {
+                        stickman.targetX = 480; //==============================K1
+                        stickman.targetY = 340; //==============================K1
+                        stickman.currentCrossroad = 1;
+                    } else if (crossroads[0].arrowDirection === "straight") {
+                        stickman.targetX = trashBins.g.x;
+                        stickman.targetY = trashBins.g.y;
+                        stickman.finalTargetColor = "g";
+                    }
+                } else if (stickman.targetX === 480 && stickman.targetY === 340) {//==============================K1
+                    if (crossroads[1].arrowDirection === "down") {
+                        stickman.targetX = trashBins.b.x;
+                        stickman.targetY = trashBins.b.y;
+                        stickman.finalTargetColor = "b";
+                    } else if (crossroads[1].arrowDirection === "straight") {
+                        stickman.targetX = trashBins.y.x;
+                        stickman.targetY = trashBins.y.y;
+                        stickman.finalTargetColor = "y";
+                    }
+                }
+
+                for (const color in trashBins) {
+                    const trashBin = trashBins[color];
+                    if (
+                        Math.abs(stickman.x - trashBin.x) < 5 &&
+                        Math.abs(stickman.y - trashBin.y) < 5
+                    ) {
+                        if (color === stickman.color) {
+                            Uspesnost++;
+                            console.log("Correct.");
+                        } else {
+                            console.log("Wrong bin!");
+                        }
+                        stickmen.splice(i, 1); 
+                        break;
+                    }
+                }
+
+                stickman.reached = false;
+                updateStickmanDirection(stickman, stickman.targetX, stickman.targetY);
+            }
         }
 
-        // Event listener for clicks on the canvas
-        canvas.addEventListener("click", (event) => {
-            // Get the click position
-            const rect = canvas.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const clickY = event.clientY - rect.top;
+        const stickmanImage = stickmanImages[stickman.color];
+        ctx.drawImage(stickmanImage, stickman.x, stickman.y, 30, 60);
+    }
 
-            // Check if the click is within the circle button
-            const buttonX = 250; // X position of the button
-            const buttonY = 220; // Y position of the button
-            const buttonRadius = 55; // Radius of the button
-            const distanceToButton = Math.sqrt((clickX - buttonX) ** 2 + (clickY - buttonY) ** 2);
+   // switch
+    crossroads.forEach(crossroad => {
+        ctx.fillStyle = "rgba(22, 188, 22, 0.3)";
+        ctx.beginPath();
+        ctx.arc(crossroad.x, crossroad.y, crossroad.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
 
-            if (distanceToButton < buttonRadius) {
-                // Toggle the visibility of the arrows
-                if (showFirstArrow) {
-                    showFirstArrow = false;
-                    showSecondArrow = true; // Show second arrow
-                } else {
-                    showFirstArrow = true; // Show first arrow
-                    showSecondArrow = false;
-                }
+        ctx.save();
+        ctx.translate(crossroad.x, crossroad.y);
+        if (crossroad.arrowDirection === "down") {
+            ctx.rotate(Math.PI / 2);
+        }
+        ctx.drawImage(arrow, -20, -20, 40, 40);
+        ctx.restore();
+    });
 
-                // Check if the sprite is between the initial position and the first target position
-                const inRange = spriteX <= initialTargetX && spriteY <= initialTargetY;
+    //uspenost text
+    ctx.fillStyle = "black"; 
+    ctx.font = "33px Arial";
+    ctx.fillText(`Uspesnost: ${Uspesnost} / 50`, 322, 30);
 
-                if (inRange) {
-                    // Change the target to (300, 500)
-                    targetX = clickTargetX;
-                    targetY = clickTargetY;
-                    updateDirection(); // Update direction for the new target
-                }
-            }
-        });
+    // koniec hry
+    if (pCount >= maxP) {
+        ctx.fillStyle = "red"; 
+        ctx.font = "28px Arial";
+        ctx.fillText("Koniec hry", 322, 70); 
+    }
 
-        // Start the game loop once both images have loaded
-        backgroundImage.onload = () => {
-            sprite.onload = () => {
-                arrow.onload = () => {
-                    gameLoop();
-                };
-            };
-        };
+    requestAnimationFrame(gameLoop);
+}
+            // krizovatky zmena klik pohybu 
+            canvas.addEventListener("click", (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const clickY = event.clientY - rect.top;
+
+                crossroads.forEach(crossroad => {
+                    const distance = Math.sqrt((clickX - crossroad.x) ** 2 + (clickY - crossroad.y) ** 2);
+                    if (distance < crossroad.radius) {
+                        // sipky zmen
+                        crossroad.arrowDirection = (crossroad.arrowDirection === "straight") ? "down" : "straight";
+                    }
+                });
+            });
+
+            spawnStickman(); 
+            gameLoop(); 
+        }
     </script>
 </body>
 </html>
