@@ -318,14 +318,28 @@ function getCell(x, y) {
 function handleMouseDown(event) {
     const cell = getCell(event.offsetX, event.offsetY);
     startCell = levels.find(p => p.x === cell.x && p.y === cell.y);
+    if (startCell) {
+        const connectionKey = `${startCell.x}-${startCell.y}-${startCell.color}`;
+        if (completedConnections.includes(connectionKey)) {
+            // Remove the connection from completedConnections array
+            completedConnections = completedConnections.filter(key => key !== connectionKey);
 
-    if (startCell && !completedConnections.includes(`${startCell.x}-${startCell.y}-${startCell.color}`)) {
-        paths.push({ color: startCell.color, path: [{ x: cell.x, y: cell.y }] });
+            // Remove the corresponding path from the paths array
+            const pathIndex = paths.findIndex(path => path.color === startCell.color && path.path.some(cell => cell.x === startCell.x && cell.y === startCell.y));
+            if (pathIndex !== -1) {
+                paths.splice(pathIndex, 1);
+            }
+
+            drawGrid();
+            drawPoints();
+            drawPaths();
+        } else {
+            paths.push({ color: startCell.color, path: [{ x: cell.x, y: cell.y }] });
+        }
     } else {
         startCell = null;
     }
 }
-
 function handleMouseMove(event) {
     if (!startCell) return;
 
@@ -334,11 +348,11 @@ function handleMouseMove(event) {
     const lastCell = lastPath.path[lastPath.path.length - 1];
 
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
-        if (completedConnections.includes(`${cell.x}-${cell.y}-${lastPath.color}`)) {
+       /* if (completedConnections.includes(`${cell.x}-${cell.y}-${lastPath.color}`)) {
             showMessage("Path already complete!");
             startCell = null;
             return;
-        }
+        }*/
 
         if (isIntersecting(cell, lastPath)) {
             return;
@@ -364,6 +378,9 @@ function handleMouseUp() {
         drawGrid();
         drawPoints();
         drawPaths();
+
+        // End the path drawing
+        startCell = null;
     } else {
         showMessage("Path not complete!");
         paths.pop();
@@ -371,9 +388,6 @@ function handleMouseUp() {
         drawPoints();
         drawPaths();
     }
-
-    // End the path drawing
-    startCell = null;
 
     if (checkWin()) {
         level++;
@@ -385,8 +399,6 @@ function handleMouseUp() {
         }
     }
 }
-
-
 function isValidMove(from, to) {
     return (
         Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1 &&
@@ -400,7 +412,7 @@ function isIntersecting(cell, currentPath) {
     for (let i = 0; i < paths.length; i++) {
         const path = paths[i];
         if (path !== currentPath) {
-            if (path.path.some(p => p.x === cell.x && p.y === cell.y && path.color !== currentPath.color)) {
+            if (path.path.some(p => p.x === cell.x && p.y === cell.y)) {
                
                 paths.splice(i, 1);
                 drawGrid();
@@ -473,5 +485,4 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-
 
