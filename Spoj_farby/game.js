@@ -228,7 +228,7 @@ const randomLevels5 = [
         { y: 0, x: 2, color: "#F6E87D" },
         { y: 5, x: 0, color: "#F6E87D" },
         { y: 1, x: 1, color: "#7DD0F6" },
-        { y: 5, x: 0, color: "#7DD0F6" },
+        { y: 0, x: 5, color: "#7DD0F6" },
         { y: 3, x: 2, color: "#784EEE" }, 
         { y: 4, x: 4, color: "#784EEE" } 
     ],
