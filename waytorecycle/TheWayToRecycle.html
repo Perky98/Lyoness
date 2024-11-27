@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stickman Trash Sorting Game</title>
+    <title>Wayy to recycle</title>
     <style>
-        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; flex-direction: column; }
-        canvas { background: #f0f0f0; border: 2px solid #333; }
-        #restartButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            position: relative;
+        }
+        canvas {
+            background: #f0f0f0;
+            border: 2px solid #333;
+        }
+        #gameContainer {
+            position: relative;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="900" height="600"></canvas>
-    <button id="restartButton" onclick="restartGame()">Restart Game</button>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1100" height="600"></canvas>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -30,15 +40,14 @@
         const bStickman = new Image();
 
         let imagesLoaded = 0;
-        const totalImages = 5; 
+        const totalImages = 5;
 
-        backgroundImage.src = "TTRmapa1.png"; 
-        arrow.src = "arrow.png"; 
-        gStickman.src = "panak1g.png"; 
-        yStickman.src = "panak2y.png"; 
-        bStickman.src = "panak3b.png"; 
+        backgroundImage.src = "TTRmapa1.png";
+        arrow.src = "arrow.png";
+        gStickman.src = "panak1g.png";
+        yStickman.src = "panak2y.png";
+        bStickman.src = "panak3b.png";
 
-        // cakaj na load imgs
         function checkImagesLoaded() {
             imagesLoaded++;
             if (imagesLoaded === totalImages) {
@@ -52,35 +61,8 @@
         yStickman.onload = checkImagesLoaded;
         bStickman.onload = checkImagesLoaded;
 
-       /*
-       function nakresliCestu() {
-    ctx.fillStyle = "grey";
-    roads.forEach(road => {
-        ctx.save();
-        ctx.translate(road.bodX, road.bodY);
-        ctx.rotate(road.angle);
-        ctx.fillRect(-segmentLength / 2, -roadWidth / 2, segmentLength, roadWidth);
-        ctx.restore();
-        if (road.rotating) {
-            ctx.beginPath();
-            ctx.arc(road.bodX, road.bodY, junctionRadius, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(0, 255, 0, 0.3)";
-            ctx.fill();
-        }
-    });
-} */
-
-/* function restartGame() {  ==============================================================================RESTART
-            stickmen.length = 0;
-            Uspesnost = 0;
-            pCount = 0;
-            spawnCooldown = 5000;
-            lastSpawnTime = 0;
-            spawnStickman(); 
-        }*/
-
         function gameStart() {
-            const colors = ["g", "y", "b"]; 
+            const colors = ["g", "y", "b"];
             const stickmanImages = {
                 g: gStickman,
                 y: yStickman,
@@ -88,24 +70,27 @@
             };
 
             const trashBins = {
-                g: { x: 477, y: 170 },
-                y: { x: 640, y: 345 },
-                b: { x: 590, y: 485 }
+                g: { x: 577, y: 170 },
+                y: { x: 755, y: 345 },
+                b: { x: 715, y: 460 }
             };
 
             const stickmen = [];
             const crossroads = [
-                { x: 250, y: 210, radius: 55, arrowDirection: "down" }, // prva k zobraz
-                { x: 480, y: 380, radius: 55, arrowDirection: "down" } //druha k zobraz
+                { x: 325, y: 220, radius: 55, arrowDirection: "down" },
+                { x: 600, y: 390, radius: 55, arrowDirection: "down" }
             ];
 
-            let Uspesnost = 0;
+            let score = 0;
             const speed = 1;
-            let pCount = 0; 
-            const maxP = 50; 
-            let spawnCooldown = 5000; 
-            let cooldownDecreaseInterval = 1000; 
-            let lastSpawnTime = 0; 
+            let stickmanCount = 0;
+            const maxP = 50;
+            let spawnCooldown = 4000;
+            const spawnReductionRate = 100;
+            let correctBinMessage = null;
+            let incorrectBinMessage = null;
+            let correctBinTimer = null;
+            let incorrectBinTimer = null;
 
             function calculateDirection(fromX, fromY, toX, toY) {
                 const dx = toX - fromX;
@@ -121,126 +106,140 @@
             }
 
             function spawnStickman() {
-                if (pCount >= maxP) return; //50staci
+                if (stickmanCount >= maxP) return;
 
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 const stickman = {
-                    x: 95,
-                    y: 75, 
+                    x: 115,
+                    y: 75,
                     color: color,
-                    targetX: 240,
+                    targetX: 295,
                     targetY: 170,
                     finalTargetX: trashBins[color].x,
                     finalTargetY: trashBins[color].y,
                     finalTargetColor: color,
                     reached: false,
-                    currentCrossroad: 0 
+                    currentCrossroad: 0
                 };
                 updateStickmanDirection(stickman, stickman.targetX, stickman.targetY);
                 stickmen.push(stickman);
-                pCount++; 
+                stickmanCount++;
 
-                //narocnost
-                if (spawnCooldown > 1000) { 
-                    spawnCooldown -= 80; 
-                }
-                
+                spawnCooldown = Math.max(1000, spawnCooldown - spawnReductionRate);
+
                 setTimeout(spawnStickman, spawnCooldown);
             }
 
             function gameLoop() {
-    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
-    for (let i = stickmen.length - 1; i >= 0; i--) {
-        const stickman = stickmen[i];
+                for (let i = stickmen.length - 1; i >= 0; i--) {
+                    const stickman = stickmen[i];
 
-        if (!stickman.reached) {
-            stickman.x += stickman.unitX * speed;
-            stickman.y += stickman.unitY * speed;
+                    if (!stickman.reached) {
+                        stickman.x += stickman.unitX * speed;
+                        stickman.y += stickman.unitY * speed;
 
-            if (Math.abs(stickman.x - stickman.targetX) < 2 && Math.abs(stickman.y - stickman.targetY) < 2) {
-                stickman.reached = true;
+                        if (Math.abs(stickman.x - stickman.targetX) < 2 && Math.abs(stickman.y - stickman.targetY) < 2) {
+                            stickman.reached = true;
 
-                if (stickman.targetX === 240 && stickman.targetY === 170) {
-                    if (crossroads[0].arrowDirection === "down") {
-                        stickman.targetX = 480; //==============================K1
-                        stickman.targetY = 340; //==============================K1
-                        stickman.currentCrossroad = 1;
-                    } else if (crossroads[0].arrowDirection === "straight") {
-                        stickman.targetX = trashBins.g.x;
-                        stickman.targetY = trashBins.g.y;
-                        stickman.finalTargetColor = "g";
-                    }
-                } else if (stickman.targetX === 480 && stickman.targetY === 340) {//==============================K1
-                    if (crossroads[1].arrowDirection === "down") {
-                        stickman.targetX = trashBins.b.x;
-                        stickman.targetY = trashBins.b.y;
-                        stickman.finalTargetColor = "b";
-                    } else if (crossroads[1].arrowDirection === "straight") {
-                        stickman.targetX = trashBins.y.x;
-                        stickman.targetY = trashBins.y.y;
-                        stickman.finalTargetColor = "y";
-                    }
-                }
+                            if (stickman.targetX === 295 && stickman.targetY === 170) {
+                                if (crossroads[0].arrowDirection === "down") {
+                                    stickman.targetX = 580;
+                                    stickman.targetY = 340;
+                                    stickman.currentCrossroad = 1;
+                                } else if (crossroads[0].arrowDirection === "straight") {
+                                    stickman.targetX = trashBins.g.x;
+                                    stickman.targetY = trashBins.g.y;
+                                    stickman.finalTargetColor = "g";
+                                }
+                            } else if (stickman.targetX === 580 && stickman.targetY === 340) {
+                                if (crossroads[1].arrowDirection === "down") {
+                                    stickman.targetX = trashBins.b.x;
+                                    stickman.targetY = trashBins.b.y;
+                                    stickman.finalTargetColor = "b";
+                                } else if (crossroads[1].arrowDirection === "straight") {
+                                    stickman.targetX = trashBins.y.x;
+                                    stickman.targetY = trashBins.y.y;
+                                    stickman.finalTargetColor = "y";
+                                }
+                            }
 
-                for (const color in trashBins) {
-                    const trashBin = trashBins[color];
-                    if (
-                        Math.abs(stickman.x - trashBin.x) < 5 &&
-                        Math.abs(stickman.y - trashBin.y) < 5
-                    ) {
-                        if (color === stickman.color) {
-                            Uspesnost++;
-                            console.log("Correct.");
-                        } else {
-                            console.log("Wrong bin!");
+                            for (const color in trashBins) {
+                                const trashBin = trashBins[color];
+                                if (
+                                    Math.abs(stickman.x - trashBin.x) < 5 &&
+                                    Math.abs(stickman.y - trashBin.y) < 5
+                                ) {
+                                    if (color === stickman.color) {
+                                        score++;
+                                        correctBinMessage = { text: "spravny kos", x: stickman.x, y: stickman.y };
+                                        clearTimeout(correctBinTimer);
+                                        correctBinTimer = setTimeout(() => {
+                                            correctBinMessage = null;
+                                        }, 500);
+                                    } else {
+                                        incorrectBinMessage = { text: "nespravny kos", x: stickman.x, y: stickman.y };
+                                        clearTimeout(incorrectBinTimer);
+                                        incorrectBinTimer = setTimeout(() => {
+                                            incorrectBinMessage = null;
+                                        }, 500);
+                                    }
+                                    stickmen.splice(i, 1);
+                                    break;
+                                }
+                            }
+
+                            stickman.reached = false;
+                            updateStickmanDirection(stickman, stickman.targetX, stickman.targetY);
                         }
-                        stickmen.splice(i, 1); 
-                        break;
                     }
+
+                    const stickmanImage = stickmanImages[stickman.color];
+                    ctx.drawImage(stickmanImage, stickman.x, stickman.y, 30, 60);
                 }
 
-                stickman.reached = false;
-                updateStickmanDirection(stickman, stickman.targetX, stickman.targetY);
+                crossroads.forEach(crossroad => {
+                    ctx.fillStyle = "rgba(22, 188, 22, 0.3)";
+                    ctx.beginPath();
+                    ctx.arc(crossroad.x, crossroad.y, crossroad.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.save();
+                    ctx.translate(crossroad.x, crossroad.y);
+                    if (crossroad.arrowDirection === "down") {
+                        ctx.rotate(Math.PI / 2);
+                    }
+                    ctx.drawImage(arrow, -20, -20, 40, 40);
+                    ctx.restore();
+                });
+
+                if (correctBinMessage) {
+                    ctx.fillStyle = "yellow";
+                    ctx.font = "20px Arial";
+                    ctx.fillText(correctBinMessage.text, correctBinMessage.x, correctBinMessage.y - 10);
+                }
+
+                if (incorrectBinMessage) {
+                    ctx.fillStyle = "red";
+                    ctx.font = "20px Arial";
+                    ctx.fillText(incorrectBinMessage.text, incorrectBinMessage.x, incorrectBinMessage.y - 10);
+                }
+
+                ctx.fillStyle = "black";
+                ctx.font = "33px Arial";
+                ctx.fillText(`Spravne recyklovanych: ${score} / 50`, 300, 30);
+
+                if (stickmanCount >= maxP) {
+                    ctx.fillStyle = "red";
+                    ctx.font = "28px Arial";
+                    ctx.fillText("Koniec hry", 400, 70);
+                }
+
+                requestAnimationFrame(gameLoop);
             }
-        }
 
-        const stickmanImage = stickmanImages[stickman.color];
-        ctx.drawImage(stickmanImage, stickman.x, stickman.y, 30, 60);
-    }
-
-   // switch
-    crossroads.forEach(crossroad => {
-        ctx.fillStyle = "rgba(22, 188, 22, 0.3)";
-        ctx.beginPath();
-        ctx.arc(crossroad.x, crossroad.y, crossroad.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-
-        ctx.save();
-        ctx.translate(crossroad.x, crossroad.y);
-        if (crossroad.arrowDirection === "down") {
-            ctx.rotate(Math.PI / 2);
-        }
-        ctx.drawImage(arrow, -20, -20, 40, 40);
-        ctx.restore();
-    });
-
-    //uspenost text
-    ctx.fillStyle = "black"; 
-    ctx.font = "33px Arial";
-    ctx.fillText(`Uspesnost: ${Uspesnost} / 50`, 322, 30);
-
-    // koniec hry
-    if (pCount >= maxP) {
-        ctx.fillStyle = "red"; 
-        ctx.font = "28px Arial";
-        ctx.fillText("Koniec hry", 322, 70); 
-    }
-
-    requestAnimationFrame(gameLoop);
-}
-            // krizovatky zmena klik pohybu 
             canvas.addEventListener("click", (event) => {
                 const rect = canvas.getBoundingClientRect();
                 const clickX = event.clientX - rect.left;
@@ -249,14 +248,13 @@
                 crossroads.forEach(crossroad => {
                     const distance = Math.sqrt((clickX - crossroad.x) ** 2 + (clickY - crossroad.y) ** 2);
                     if (distance < crossroad.radius) {
-                        // sipky zmen
-                        crossroad.arrowDirection = (crossroad.arrowDirection === "straight") ? "down" : "straight";
+                        crossroad.arrowDirection = crossroad.arrowDirection === "straight" ? "down" : "straight";
                     }
                 });
             });
 
-            spawnStickman(); 
-            gameLoop(); 
+            setTimeout(spawnStickman, 2000);
+            gameLoop();
         }
     </script>
 </body>
