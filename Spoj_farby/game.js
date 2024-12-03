@@ -341,24 +341,35 @@ function handleMouseDown(event) {
     }
 }
 function handleMouseMove(event) {
-    if (!startCell) return;
+    if (!startCell) return; // If no starting cell, exit the function
 
     const cell = getCell(event.offsetX, event.offsetY);
-    const lastPath = paths[paths.length - 1];
-    const lastCell = lastPath.path[lastPath.path.length - 1];
+    
+    // Ensure there is at least one path before proceeding
+    if (paths.length === 0) return; // Exit if there are no paths
+
+    const lastPath = paths[paths.length - 1]; // Get the last path
+
+    // Ensure lastPath is defined and has a path property
+    if (!lastPath || !lastPath.path) return;
+
+    const lastCell = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
 
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
-       /* if (completedConnections.includes(`${cell.x}-${cell.y}-${lastPath.color}`)) {
-            showMessage("Path already complete!");
-            startCell = null;
-            return;
-        }*/
-
-        if (isIntersecting(cell, lastPath)) {
-            return;
+        // Check if the last path's color matches the current cell's color
+        const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
+        if (currentPoint && lastPath.color === currentPoint.color) {
+            // Allow movement if the colors match
+        } else if (currentPoint) {
+            // Block movement if the colors do not match
+            return; 
         }
 
-        lastPath.path.push(cell);
+        if (isIntersecting(cell, lastPath)) {
+            return; // Prevent intersection
+        }
+
+        lastPath.path.push(cell); // Add the current cell to the path
         drawGrid();
         drawPoints();
         drawPaths();
@@ -367,34 +378,40 @@ function handleMouseMove(event) {
 
 
 function handleMouseUp() {
-    if (!startCell) return;
+    if (!startCell) return; // If there's no starting cell, exit the function
+
     const lastPath = paths[paths.length - 1];
+    if (!lastPath) return; // Ensure there's a path to work with
+
     const startColor = lastPath.color;
 
+    // Check if the connection is complete
     if (checkConnectionComplete(lastPath, startColor)) {
+        // Lock the path by adding it to completed connections
         for (const cell of lastPath.path) {
             completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
         }
         drawGrid();
-        drawPoints();
+        drawPoints(levels);
         drawPaths();
 
-        // End the path drawing
-        startCell = null;
+        // End the path drawing session
+        startCell = null; // Clear the start cell to lock the line drawing
     } else {
         showMessage("Path not complete!");
-        paths.pop();
+        paths.pop(); // Remove the last path if not complete
         drawGrid();
-        drawPoints();
+        drawPoints(levels);
         drawPaths();
     }
 
+    // Check for win condition
     if (checkWin()) {
         level++;
         if (level < 5) {
-            initGame();
+            initGame(); // Initialize the next level
         } else {
-            showCompletionMessage();
+            showCompletionMessage(); // Show completion message if all levels are done
             clearInterval(timerInterval);
         }
     }
@@ -485,4 +502,3 @@ function getRandomLevel(levels) {
 }
 
 initGame();
-
