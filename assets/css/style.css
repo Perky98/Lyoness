@@ -513,3 +513,8 @@ footer {
         max-width: 1560px;
     }
 }
+
+
+.full-width {
+    width: 100%;
+}
