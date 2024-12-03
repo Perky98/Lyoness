@@ -53,3 +53,12 @@ body {
     cursor: pointer;
 }
 
+#gameScreen button .rovnake {
+  background-color: #1E9F25;
+}
+
+#gameScreen button .rozne {
+  background-color: #AD262D;
+}
+
+
