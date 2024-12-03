@@ -82,6 +82,10 @@ header {
     background-repeat: no-repeat;
 }
 
+footer  .nav-links a span {
+ color : white;
+}
+
 .top-sec {
     position: relative;
     padding: 100px 0 30px;
