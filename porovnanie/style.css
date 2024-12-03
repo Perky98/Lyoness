@@ -32,7 +32,7 @@ body {
 #introScreen button {
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #007BFF;
+    background-color: #e0b0c7;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -40,9 +40,16 @@ body {
 }
 
 #introScreen button:hover {
-    background-color: #0056b3;
+    background-color: #af5781;
 }
 
 
-
+#gameScreen button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
