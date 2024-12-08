@@ -324,7 +324,7 @@ function handleMouseDown(event) {
             // Remove the connection from completedConnections array
             completedConnections = completedConnections.filter(key => key !== connectionKey);
 
-            // Remove the corresponding path from the paths array
+        
             const pathIndex = paths.findIndex(path => path.color === startCell.color && path.path.some(cell => cell.x === startCell.x && cell.y === startCell.y));
             if (pathIndex !== -1) {
                 paths.splice(pathIndex, 1);
@@ -355,6 +355,12 @@ function handleMouseMove(event) {
 
     const lastCell = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
 
+    // Check if the current cell is the same as the start cell or the last cell
+    if ((cell.x === startCell.x && cell.y === startCell.y) || 
+        (cell.x === lastCell.x && cell.y === lastCell.y)) {
+        return; // Prevent movement if it's on the start or last cell
+    }
+
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
         // Check if the last path's color matches the current cell's color
         const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
@@ -375,8 +381,6 @@ function handleMouseMove(event) {
         drawPaths();
     }
 }
-
-
 function handleMouseUp() {
     if (!startCell) return; // If there's no starting cell, exit the function
 
@@ -394,6 +398,9 @@ function handleMouseUp() {
         drawGrid();
         drawPoints(levels);
         drawPaths();
+
+        // Show a message indicating successful connection
+        showMessage(`Connected ${startColor} dots!`);
 
         // End the path drawing session
         startCell = null; // Clear the start cell to lock the line drawing
@@ -417,11 +424,26 @@ function handleMouseUp() {
     }
 }
 function isValidMove(from, to) {
-    return (
-        Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1 &&
-        to.x >= 0 && to.x < gridSize &&
-        to.y >= 0 && to.y < gridSize
-    );
+    // Check if the move is adjacent
+    const isAdjacent = Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1;
+
+    // Check if the target cell is within bounds
+    const isInBounds = to.x >= 0 && to.x < gridSize && to.y >= 0 && to.y < gridSize;
+
+    // Check if there is at least one path to check against
+    if (paths.length > 0) {
+        const lastPath = paths[paths.length - 1]; // Get the last path
+        const secondPoint = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
+
+        // Check if the target cell is the second point of the same color
+        const currentPoint = levels.find(p => p.x === to.x && p.y === to.y);
+        if (currentPoint && currentPoint.color === lastPath.color && 
+            (to.x === secondPoint.x && to.y === secondPoint.y)) {
+            return false; // Prevent moving to the second point of the same color
+        }
+    }
+
+    return isAdjacent && isInBounds; // Return true if the move is valid
 }
 
 
