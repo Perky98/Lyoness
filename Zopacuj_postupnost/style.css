@@ -126,7 +126,7 @@ body {
 
 .grid-item {
     background: #FDAC66;
-    border-radius: 8px;
+    border-radius: 6px;
     aspect-ratio: 1; /* Делаем плитки квадратными */
     transition: background 0.3s;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
