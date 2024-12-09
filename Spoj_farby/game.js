@@ -350,7 +350,7 @@ function handleMouseMove(event) {
 
     const lastPath = paths[paths.length - 1]; // Get the last path
 
-    // Ensure lastPath is defined and has a path property
+    // Ensure lastPath is defined and has a path propert
     if (!lastPath || !lastPath.path) return;
 
     const lastCell = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
