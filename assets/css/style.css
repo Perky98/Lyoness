@@ -109,7 +109,7 @@ footer  .nav-links a span {
     z-index: 1;
     position: absolute;
     text-align: center;
-    top: -50px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
 }
