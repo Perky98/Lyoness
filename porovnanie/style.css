@@ -14,6 +14,7 @@ body {
 .gamePanel {
     display: flex;
     justify-content: center;
+    gap: 1em;
 }
 
 .image-square {
@@ -53,11 +54,11 @@ body {
     cursor: pointer;
 }
 
-#gameScreen button .rovnake {
+.gamePanel .rovnake {
   background-color: #1E9F25;
 }
 
-#gameScreen button .rozne {
+.gamePanel .rozne {
   background-color: #AD262D;
 }
 
