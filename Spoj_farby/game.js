@@ -424,12 +424,12 @@ function handleMouseUp() {
     }
 }
 function isValidMove(from, to) {
-
+    // Check if the move is adjacent
     const isAdjacent = Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1;
 
     // Check if the target cell is within bounds
     const isInBounds = to.x >= 0 && to.x < gridSize && to.y >= 0 && to.y < gridSize;
-    
+
     // Check if there is at least one path to check against
     if (paths.length > 0) {
         const lastPath = paths[paths.length - 1]; // Get the last path
@@ -437,12 +437,9 @@ function isValidMove(from, to) {
 
         // Check if the target cell is the second point of the same color
         const currentPoint = levels.find(p => p.x === to.x && p.y === to.y);
-
-        if (currentPoint && currentPoint.color === lastPath.color &&  (to.x === secondPoint.x && to.y === secondPoint.y)) 
-            {
-
-                startCell = null;
-            return false; 
+        if (currentPoint && currentPoint.color === lastPath.color && 
+            (to.x === secondPoint.x && to.y === secondPoint.y)) {
+            return false; // Prevent moving to the second point of the same color
         }
     }
 
@@ -451,38 +448,22 @@ function isValidMove(from, to) {
 
 
 function isIntersecting(cell, currentPath) {
-    // Check if the current cell is already part of the current path
-    if (currentPath.path.some(p => p.x === cell.x && p.y === cell.y)) {
-        // If it is, we need to remove the path
-        const pathIndex = paths.findIndex(path => path === currentPath);
-        if (pathIndex !== -1) {
-            paths.splice(pathIndex, 1); // Remove the intersecting path
-            drawGrid();
-            drawPoints();
-            drawPaths();
-        }
-        return true; // Indicate that an intersection was found
-    }
-
-    // Check for intersections with other paths
     for (let i = 0; i < paths.length; i++) {
         const path = paths[i];
         if (path !== currentPath) {
             if (path.path.some(p => p.x === cell.x && p.y === cell.y)) {
-                // If the cell is part of another path, remove the current path
-                const pathIndex = paths.findIndex(path => path === currentPath);
-                if (pathIndex !== -1) {
-                    paths.splice(pathIndex, 1); // Remove the intersecting path
-                    drawGrid();
-                    drawPoints();
-                    drawPaths();
-                }
-                return true; // Indicate that an intersection was found
+               
+                paths.splice(i, 1);
+                drawGrid();
+                drawPoints();
+                drawPaths();
+                return false; 
             }
         }
     }
-    return false; // No intersection found
+    return false;
 }
+
 
 function checkConnectionComplete(path, color) {
     const pointsOfColor = levels.filter(p => p.color === color);
