@@ -243,7 +243,7 @@ footer {
 
 .ts-game-img {
     position: absolute;
-    bottom: 45%;
+    bottom: 35%;
     left: 50%;
     transform: translateX(-50%) translateY(50%);
     z-index: 2;
@@ -251,10 +251,11 @@ footer {
     object-fit: cover;
     max-width: 100%;
     width: 70%; 
-    height: 89%; 
+    height: 75%; 
     border-radius: 30px; 
     box-shadow: 4px 4px 0px rgba(29, 8, 42, 0.5); 
 }
+
 
 
 .games-details {
