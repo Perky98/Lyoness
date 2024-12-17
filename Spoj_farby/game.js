@@ -13,6 +13,32 @@ let completedConnections = [];
 const levelDisplay = document.getElementById("levelDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
 const messageDisplay = document.getElementById("messageDisplay");
+document.getElementById("startButton").addEventListener("click", function() { 
+    document.getElementById("startScreen").style.display = "none"; // Hide the start screen 
+    document.querySelector(".info").style.display = "flex"; // Show game info 
+    document.getElementById("gameCanvas").style.display = "block"; // Show the canvas 
+    document.getElementById("level-icon").style.display = "block"; // Show the help image
+    initGame(); // Initialize the game 
+});
+// Get the modal
+const modal = document.getElementById("imageModal");
+const modalImage = document.getElementById("modalImage");
+const closeModal = document.getElementById("closeModal");
+
+// When the user clicks on helpB.png, open the modal
+document.getElementById("level-icon").addEventListener("click", function() {
+    modal.style.display = "block";
+});
+
+// When the user clicks on <span> (x), close the modal
+closeModal.addEventListener("click", function() {
+    modal.style.display = "none";
+});
+
+// When the user clicks on the modal image, close the modal
+modalImage.addEventListener("click", function() {
+    modal.style.display = "none";
+});
 
 const fixedLevel = [
     [
