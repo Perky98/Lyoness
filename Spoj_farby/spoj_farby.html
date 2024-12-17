@@ -8,14 +8,33 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Spoj farby</h1>
-        <div class="info">
-            <div id="levelDisplay">Level: 1</div>
-            <div id="timeDisplay">Time: 0 </div>
-        </div>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="messageDisplay" class="message">Congrat! You pass all level</div>
-    </div>
-    <script src="game.js"></script>
+        <h1>
+             Spoj 
+            <span class="yellow"> f</span> 
+            <span class="blue">a</span> 
+            <span class="green">r</span> 
+            <span class="red">b</span> 
+            <span class="purple">y</span>
+            <span><div id="level-icon" style="display: none;"><img src="helpB.png" alt="Level Icon"></div>
+            </span>
+        </h1>
+
+        <div id="startScreen"> 
+            <button id="startButton">Start</button> 
+        </div> 
+        <div class="info" style="display: none;"> 
+            <div id="levelDisplay">Level: 1</div> 
+            <div id="timeDisplay">Time: 0 </div> 
+        </div> 
+        <canvas id="gameCanvas" width="400" height="400" style="display: none;"></canvas> 
+        <div id="messageDisplay" class="message">Congrat! You pass all level</div> 
+    </div> 
+
+    <div id="imageModal" class="modal" style="display: none;"> 
+        <span class="close" id="closeModal">&times;</span> 
+        <img class="modal-content" id="modalImage" src="img.png" alt="Help Image"> 
+    </div> 
+
+    <script src="game.js"></script> 
 </body>
 </html>
