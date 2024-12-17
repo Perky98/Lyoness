@@ -56,7 +56,7 @@ function loadGameDetails() {
     if (game && gameDescriptions[game]) {
         document.getElementById("details-page").innerHTML = `
             <section class="top-sec">
-                <div class="container">
+                <div class="full-width">
                     <div class="title">
                         <img src="./assets/img/sun.png" alt="Sun" class="ts-sun">
                         <h1>${gameDescriptions[game].title}</h1>
