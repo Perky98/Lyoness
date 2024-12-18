@@ -426,7 +426,7 @@ function handleMouseUp() {
         drawPaths();
 
         // Show a message indicating successful connection
-        showMessage(`Connected ${startColor} dots!`);
+       // showMessage(`Connected ${startColor} dots!`);
 
         // End the path drawing session
         startCell = null; // Clear the start cell to lock the line drawing
