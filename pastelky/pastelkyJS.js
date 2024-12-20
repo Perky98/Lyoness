@@ -6,6 +6,10 @@ const imageOverlay = document.getElementById('image-overlay');
 const overlayImage = document.getElementById('overlay-image');
 const koniecButton = document.getElementById('koniec-button');
 
+
+let alignmentStartPositions = [];
+
+
 let score = 0; 
 const gameOverscreen = document.getElementById('gameOver-screen');
 const finalScoreDisplay = document.getElementById('final-score');
@@ -29,7 +33,7 @@ startButton.addEventListener('click', () => {
 
 
 function quitGame() {
-    titleScreen.style.display = 'flex';
+    titleScreen.style.display = 'block';
     gameContainer.style.display = 'none';
     clearInterval(memorizationInterval);
     clearInterval(alignmentInterval);
@@ -52,8 +56,8 @@ resetButton.style.bottom = '10px';
 resetButton.style.backgroundColor = 'white';
 resetButton.style.right = '10px';
 resetButton.style.fontWeight = 'bold';
-resetButton.style.padding = '10px 20px';
-resetButton.style.fontSize = '20px';
+resetButton.style.padding = '8px 14px';
+resetButton.style.fontSize = '13px';
 resetButton.style.borderRadius = '11px';
 gameContainer.appendChild(resetButton);
 
@@ -98,7 +102,7 @@ function gameOver() {
     clearInterval(memorizationInterval);
 //console.log('kkoniec');
     gameContainer.style.display = 'none';
-    gameOverscreen.style.display = 'flex';
+    gameOverscreen.style.display = 'block';
     finalScoreDisplay.textContent = `Skóre: ${score}`;
 }
 
@@ -116,7 +120,10 @@ function updateScore(points) {
 
 //=================================================================================-----Heeelp
 levelIcon.addEventListener('click', () => {
-    imageOverlay.style.display = 'flex'; 
+    imageOverlay.style.display = 'block'; 
+
+    //imageOverlay.style.position = 'relative';
+   // imageOverlay.style.padding = '10px 20px';
 });
 overlayImage.addEventListener('click', () => {
     imageOverlay.style.display = 'none'; 
@@ -124,7 +131,7 @@ overlayImage.addEventListener('click', () => {
 });
 function restartGame() {
     //console.log('reeestart');
-    titleScreen.style.display = 'flex'; 
+    titleScreen.style.display = 'block'; 
     gameContainer.style.display = 'none'; 
     resetGame();
 }
@@ -136,10 +143,26 @@ function updateLVLdisplay() {
     levelDisplay.textContent = `Level: ${LVL}`;
 }
 
+
+/*
 function updateProgressBar(remainingTime, maxTime) {
     const percentage = Math.max((remainingTime / maxTime) * 100, 0); 
     progressFill.style.width = `${percentage}%`;
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 function spawnPastelky() {
     updateProgressBar(5, 5);
     gameContainer.innerHTML = '';
@@ -233,33 +256,45 @@ function startMemorizationPhase() {
 }
 
 function startAlignmentTimer() {
-    alignmentTimer = 15;
+    alignmentTimer = 15; 
     gameActive = true;
-    updateProgressBar(15, 15);
-    //statusDisplay.textContent = 'Usporiadaj pastelky';
+    updateProgressBar(alignmentTimer, 15);
+    enableHoverEffect();
+
+    alignmentStartPositions = [];
+    const crayons = document.querySelectorAll('.crayon');
+    crayons.forEach(crayon => {
+        alignmentStartPositions.push({
+            x: parseFloat(crayon.style.left),
+            y: parseFloat(crayon.style.top)
+        });
+    });
 
     clearInterval(alignmentInterval);
 
     alignmentInterval = setInterval(() => {
-        alignmentTimer--;
+        alignmentTimer -= 0.1; // kkk
         updateProgressBar(alignmentTimer, 15);
 
-       /* if (alignmentTimer <= 0) {
+        if (alignmentTimer <= 0) {
             clearInterval(alignmentInterval);
-           // statusDisplay.textContent = 'Cas uplynul';
             gameActive = false;
-            setTimeout(resetGame, 2000);
-        }*/
-       //=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            if (alignmentTimer <= 0) {
-                clearInterval(alignmentInterval);
-                gameActive = false;
-                gameOver();
-            }
-
-    }, 1000);
+            gameOver();
+        }
+    }, 100); 
 
     enableDrag();
+}
+
+function updateProgressBar(remainingTime, maxTime) {
+    const percentage = Math.max((remainingTime / maxTime) * 100, 0);
+    progressFill.style.width = `${percentage}%`;
+
+    const green = Math.min(255, Math.floor((remainingTime / maxTime) * 255));
+    const red = Math.min(255, 255 - green);
+    const color = `rgb(${red}, ${green}, 0)`;
+
+    progressFill.style.backgroundColor = color;
 }
 
 function shuffleCrayons() {
@@ -270,12 +305,15 @@ function shuffleCrayons() {
         shuffledPos.sort(() => Math.random() - 0.5);
     } while (positionsAreEqual(shuffledPos, origPos));
 
+    alignmentStartPositions = []; 
     crayons.forEach((crayon, index) => {
         const posX = shuffledPos[index].x + 5;
-        const posY = shuffledPos[index].y + 190;//---------------------------------------------------------------------------------------
+        const posY = shuffledPos[index].y + 190;
 
         crayon.style.left = `${posX}px`;
         crayon.style.top = `${posY}px`;
+
+        alignmentStartPositions.push({ x: posX, y: posY });
     });
 }
 
@@ -331,6 +369,27 @@ function dragEnd() {
     selectedCrayon = null;
 }
 
+function enableHoverEffect() {
+    const crayons = document.querySelectorAll('.crayon');
+
+    crayons.forEach(crayon => {
+        crayon.addEventListener('mouseenter', () => {
+            if (gameActive) {
+                crayon.style.transform = 'translateY(-20px)';
+               // crayon.style.boxShadow = '0px 10px 20px rgba(0, 0, 0, 0.3)';
+            }
+        });
+
+        crayon.addEventListener('mouseleave', () => {
+            crayon.style.transform = 'translateY(0)';
+            crayon.style.boxShadow = 'none';
+        });
+    });
+}
+
+
+
+
 function checkCrayonPosition(crayon) {
     const crayonX = parseFloat(crayon.style.left);
     const crayonY = parseFloat(crayon.style.top);
@@ -341,39 +400,43 @@ function checkCrayonPosition(crayon) {
         const holderX = holder.x;
         const holderY = holder.y;
 
+
         if (Math.abs(crayonX - holderX) < 50 && Math.abs(crayonY - holderY) < 50) {
             const crayons = document.querySelectorAll('.crayon');
             crayons.forEach(otherCrayon => {
                 if (otherCrayon !== crayon) {
                     const otherCrayonX = parseFloat(otherCrayon.style.left);
                     const otherCrayonY = parseFloat(otherCrayon.style.top);
-                    if (Math.abs(otherCrayonX - holderX) < 50 && Math.abs(otherCrayonY - holderY) < 50) holderOccupied = true;
+      
+                    if (Math.abs(otherCrayonX - holderX) < 50 && Math.abs(otherCrayonY - (holderY - 50)) < 50) {
+                        holderOccupied = true;
+                    }
                 }
             });
 
+      
             if (!holderOccupied) {
-                crayon.style.left = `${holderX+(2)}px`;//-----------------------------------------------------------------------------------------------------
-                crayon.style.top = `${holderY + (-100) / 2}px`;
+                crayon.style.left = `${holderX + 2}px`;
+                crayon.style.top = `${holderY - 50}px`;
                 placedOnHolder = true;
             }
         }
     });
 
-    if (holderOccupied) {
-        crayon.style.left = `${prevPosition.x}px`;
-        crayon.style.top = `${prevPosition.y}px`;
+  
+    if (holderOccupied || !placedOnHolder) {
+        const crayonIndex = Array.from(document.querySelectorAll('.crayon')).indexOf(crayon);
+        crayon.style.left = `${alignmentStartPositions[crayonIndex].x}px`;
+        crayon.style.top = `${alignmentStartPositions[crayonIndex].y}px`;
     }
 
+  
     if (placedOnHolder && !holderOccupied && isLevelCompleted()) {
         gameActive = false;
         clearInterval(alignmentInterval);
-       // statusDisplay.textContent = 'Spravne';
         setTimeout(nextLevel, 500);
-    } //else if (!holderOccupied) {
-      //  statusDisplay.textContent = 'Usporiadaj pastelky';
-   // }
+    }
 }
-
 function increaseScore() {
     score += 100; 
     updateScoreDisplay();
@@ -397,7 +460,7 @@ function isLevelCompleted() {
 
 function nextLevel() {
     LVL++;
-    crayonCount = Math.min(7, crayonCount + 1);
+    crayonCount = Math.min(8, crayonCount + 1);
     updateLVLdisplay();
     increaseScore(); 
     spawnPastelky();
