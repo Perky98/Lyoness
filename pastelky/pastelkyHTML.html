@@ -17,9 +17,8 @@
 
                #title-screen {
             position: absolute;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
+            
+            display: block;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -87,6 +86,7 @@
     outline: none;
     cursor: pointer; 
     z-index: 2; 
+    padding: 5px 10px;
 }
 
 #restart-button:hover {
@@ -96,12 +96,6 @@
 
 
 /*gotlacitka---------------d-----------------------------------------------------------fdh*/
-
-
-
-
-
-
 
 /*111111111111111111111111111111111111111111111111111111*/
 #koniec-button {
@@ -129,9 +123,13 @@
 
 
 #title-screen {
-    position: absolute;
-    width: 35vw;
-    height: 35vh;
+    
+
+    position: relative;
+            width: 900px;
+            height: 500px;
+
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -142,7 +140,7 @@
 
 #start-image {
     width: 100%; 
-    height: auto;
+    /*height: auto;*/
     z-index: 1; 
 }
         #game-container {
@@ -220,11 +218,11 @@
 
 #image-overlay {
     position: absolute;
-    top: 31%;
-    left: 32.4%;
-    width: 35.2vw;
-    height: 38vh;
-    background-color: rgba(0, 0, 0, 0.8); 
+
+     width: 900px;
+            height: 500px;
+
+            background-color: rgba(0, 0, 0, 0.8);
     display: none; 
     justify-content: center;
     align-items: center;
@@ -232,17 +230,17 @@
 }
 
 #overlay-image {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 100%;
+    max-height: 100%;
     cursor: pointer; 
 }
 
+
 #gameOver-screen {
-    position: absolute;
-    top: 500;
-    left: 500;
-    width: 35vw;
-    height: 38vh;
+     position: relative;
+            width: 900px;
+            height: 500px;
+
     background-color: rgba(0, 0, 0, 0.8); 
     display: none; 
     justify-content: center;
@@ -285,6 +283,11 @@
             position: absolute;
             user-select: none;
         }
+        
+
+       
+
+
         .holder {
             position: absolute;
             width: 44px; /*66*/
@@ -319,17 +322,17 @@
 
 
     <div id="title-screen">
-        <img src="AstartImg.png" id="start-image" alt="Overlay Image">
+        <img src="AAAstartImg.png" id="start-image" alt="Overlay Image">
         <button id="start-button">Start Game</button>
         <button id="koniec-button">Koniec</button>
         
     </div>
     <div id="image-overlay">
-        <img src="helpImg.png" id="overlay-image" alt="Overlay Image">
+        <img src="AhelpImg.png" id="overlay-image" alt="Overlay Image">
     </div>
 
     <div id="gameOver-screen">
-        <img src="AgoverImg.png" id="start-image" alt="Game Over Image">
+        <img src="AAAgoverImg.png" id="start-image" alt="Game Over Image">
         <button id="restart-button">Hrať znovu</button>
         <button id="gokoniec-button">Ukončiť hru</button>
         
@@ -373,7 +376,7 @@
       
        
         <div id="level">Level: 1</div>
-        <div id="status">Zapamataj usporiadanie pasteliek!</div>
+        <!--<div id="status">Zapamataj usporiadanie pasteliek!</div>-->
     </div>
 
     <script src="pastelkyJS.js"></script>
