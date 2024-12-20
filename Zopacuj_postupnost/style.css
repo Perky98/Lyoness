@@ -104,10 +104,10 @@ pointer-events: auto;
 #fullscreen-image {
    /* display: block; /* Додано для центрування */
     /*margin: 0 auto; /* Центрування зображення */
-    max-width: none; /* Вимкнення обмеження ширини */
-    max-height: none; /* Вимкнення обмеження висоти */
-    position: absolute; 
-   /* top: 100px; 
+   /* max-width: none; /* Вимкнення обмеження ширини */
+  /*  max-height: none; /* Вимкнення обмеження висоти */
+   /* position: absolute; 
+   /*max-width: 800px;  
    /* left: 670px; 
   /*  transform: translate(-50%, -50%); /* Центрування зображення */
     z-index: 999; /* Залишити, щоб зображення було поверх інших елементів */
