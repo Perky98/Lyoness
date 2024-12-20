@@ -370,7 +370,9 @@ function handleMouseMove(event) {
     if (!startCell) return; // If no starting cell, exit the function
 
     const cell = getCell(event.offsetX, event.offsetY);
-    
+    if (paths.length > 0 && completedConnections.includes(`${startCell.x}-${startCell.y}-${startCell.color}`)) {
+        return; // Якщо з'єднання завершено, не дозволяйте рухати курсор
+    }
     // Ensure there is at least one path before proceeding
     if (paths.length === 0) return; // Exit if there are no paths
 
@@ -386,7 +388,12 @@ function handleMouseMove(event) {
         (cell.x === lastCell.x && cell.y === lastCell.y)) {
         return; // Prevent movement if it's on the start or last cell
     }
-
+    const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
+    if (currentPoint && completedConnections.includes(`${currentPoint.x}-${currentPoint.y}-${currentPoint.color}`)) {
+       // showMessage(`Ця точка кольору ${currentPoint.color} вже з'єднана!`);
+        startCell = null; // Зупинити малювання
+        return; // Запобігти подальшому малюванню
+    }
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
         // Check if the last path's color matches the current cell's color
         const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
@@ -466,6 +473,11 @@ function isValidMove(from, to) {
         if (currentPoint && currentPoint.color === lastPath.color && 
             (to.x === secondPoint.x && to.y === secondPoint.y)) {
             return false; // Prevent moving to the second point of the same color
+        }
+        // Check if the current point is the start cell and has the same color
+        if (currentPoint && startCell && startCell.color === currentPoint.color && 
+            (to.x === startCell.x && to.y === startCell.y)) {
+            return false; // Prevent moving back to the start cell
         }
     }
 
