@@ -9,15 +9,10 @@ const resetButton = document.createElement('button');
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 //* go--------------------------------------*/
-const gameOverscreen = document.getElementById('gameOver-screen');
-const finalScoreDisplay = document.getElementById('final-score');
-const restartButton = document.getElementById('restart-button');
 
-
-
-
-
-
+const gameOverscreen = document.getElementById('GOscreen');
+//const finalScoreDisplay = document.getElementById('final-score');
+const GOrestartButton = document.getElementById('restart-button');
 
 const backgroundImage = new Image();
 const arrow = new Image();
@@ -28,29 +23,120 @@ const bStickman = new Image();
 let imagesLoaded = 0;
 const totalImages = 5;
 
+
+/*FIXFIXFIX=========FIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIX
+const scoreLabel = document.createElement('div');
+scoreLabel.textContent = `Score: ${score}`; // Replace `currentScore` with your score variable
+scoreLabel.style.position = 'absolute';
+scoreLabel.style.fontFamily = 'Comic Sans MS';
+
+scoreLabel.style.bottom = '1031px';
+scoreLabel.style.backgroundColor = 'white';
+scoreLabel.style.right = '1031px';
+//scoreLabel.style.top = '50%'; 
+//scoreLabel.style.left = '50%';
+//scoreLabel.style.transform = 'translate(-50%, -50%)'; // Center the text
+scoreLabel.style.fontWeight = 'bold';
+//scoreLabel.style.padding = '12px 20px';
+//scoreLabel.style.fontSize = '33px';
+scoreLabel.style.zIndex =1;
+//scoreLabel.style.borderRadius = '12px';
+scoreLabel.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
+scoreLabel.style.textAlign = 'center';
+
+// Append the score label to the game container
+gameOverscreen.appendChild(scoreLabel);
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+const stickmen = [];
+const crossroads = [
+    { x: 325, y: 220, radius: 55, arrowDirection: "down" },
+    { x: 600, y: 390, radius: 55, arrowDirection: "down" }
+];
+
+
+
+let correctBinTimer = null;
+let incorrectBinTimer = null;
+
+
+let score = 0;
+
+/*
+let checkImagesLoaded = null;
+backgroundImage.onload = checkImagesLoaded;
+arrow.onload = checkImagesLoaded;
+gStickman.onload = checkImagesLoaded;
+yStickman.onload = checkImagesLoaded;
+bStickman.onload = checkImagesLoaded;
+*/
+
+
+
+
 function gameOver() {
-    gameActive = false;
-    clearInterval(alignmentInterval);
-    clearInterval(memorizationInterval);
+//gameActive = false;
+// clearInterval(alignmentInterval);
+//clearInterval(memorizationInterval);
 //console.log('kkoniec');
-    gameContainer.style.display = 'none';
-    gameOverscreen.style.display = 'flex';
-    finalScoreDisplay.textContent = `Skóre: ${score}`;
+   //gameContainer.style.display = 'none';
+   gameOverscreen.style.display = 'flex';
+   finalScoreDisplay.style.display = 'relative';
+   finalScoreDisplay.textContent = `Skóre: ${score}`;
+
+
+    //ctx.fillStyle = "black";
+    //ctx.font = "33px Comic Sans MS";
+    //ctx.fillText(`Skóre: ${score} / 50`, 215, 42);
+    
 }
 
-restartButton.addEventListener('click', () => {
-    gameOverscreen.style.display = 'none'; 
-    score = 0; 
-    LVL = 1; 
-    startGame(); 
-});
+/*
+GOrestartButton.addEventListener('click', () => {
+    // Reset all game variables
+    stickmen.length = 0; // Clear the stickmen array
+    score = 0; // Reset the score
+    stickmanCount = 0; // Reset stickman count
+    spawnCooldown = 4000; // Reset spawn cooldown
+    correctBinMessage = null;
+    incorrectBinMessage = null;
+    clearTimeout(correctBinTimer);
+    clearTimeout(incorrectBinTimer);
+
+    // Hide the game over screen
+    gameOverscreen.style.display = 'none';
+    gameContainer.style.display = 'flex';
+    // Restart the game loop
+    //gameStart();
+});*/
+
+
+
 function restartGame() {
-    //console.log('reeestart');
-    titleScreen.style.display = 'flex'; 
-    gameContainer.style.display = 'none'; 
-    score=0;
-    startGame();
+    gameOverscreen.style.display = 'none'; 
+    titleScreen.style.display = 'none'; 
+    gameOverscreen.offsetHeight;
+
+    gameContainer.style.display = 'block'; 
+    score=0; 
+   // LVL=1;
+    gameStart(); 
 }
+GOrestartButton.addEventListener('click', restartGame);
+
+
 //* go--------------------------------------*/
 
 
@@ -67,7 +153,7 @@ resetButton.style.fontSize = '20px';
 resetButton.style.borderRadius = '11px';
 gameContainer.appendChild(resetButton);
 
-resetButton.addEventListener('click', gameStart);//=-------------------==-=-=--=rgffds
+resetButton.addEventListener('click', gameStart);//=-----------------RESTART B
 
 /*no */
 
@@ -75,8 +161,11 @@ resetButton.addEventListener('click', gameStart);//=-------------------==-=-=--=
 
 startButton.addEventListener('click', () => {
     titleScreen.style.display = 'none'; 
+    //gameOverscreen.style.display='none';
     gameContainer.style.display = 'block'; 
     checkImagesLoaded();
+    score=0;
+    gameStart();
 });
 /*
 startButton.addEventListener('click', startGame);
@@ -108,7 +197,7 @@ levelIcon.addEventListener('click', () => {
 
 overlayImage.addEventListener('click', () => {
     imageOverlay.style.display = 'none'; 
-    startGame(); 
+    gameStart();
 });
 
 //---help
@@ -126,12 +215,6 @@ function checkImagesLoaded() {
         gameStart();
     }
 }
-
-backgroundImage.onload = checkImagesLoaded;
-arrow.onload = checkImagesLoaded;
-gStickman.onload = checkImagesLoaded;
-yStickman.onload = checkImagesLoaded;
-bStickman.onload = checkImagesLoaded;
 
 function gameStart() {
     const colors = ["g", "y", "b"];
@@ -153,10 +236,9 @@ function gameStart() {
         { x: 600, y: 390, radius: 55, arrowDirection: "down" }
     ];
 
-    let score = 0;
     const speed = 1;
     let stickmanCount = 0;
-    const maxP = 50;
+    const maxP = 50; //===========================jakooooooooooooooooooooooooooooooooooooooooooooooooooooooouy
     let spawnCooldown = 4000;
     const spawnReductionRate = 100;
     let correctBinMessage = null;
@@ -244,15 +326,15 @@ function gameStart() {
                             Math.abs(stickman.y - trashBin.y) < 5
                         ) {
                             if (color === stickman.color) {
-                                score++;
+                                if(stickmanCount <= maxP) score++;
                                 correctBinMessage = { text: "spravny kos", x: stickman.x, y: stickman.y };
-                                clearTimeout(correctBinTimer);
+                                //clearTimeout(correctBinTimer);
                                 correctBinTimer = setTimeout(() => {
                                     correctBinMessage = null;
                                 }, 500);
                             } else {
                                 incorrectBinMessage = { text: "nespravny kos", x: stickman.x, y: stickman.y };
-                                clearTimeout(incorrectBinTimer);
+                                //clearTimeout(incorrectBinTimer);
                                 incorrectBinTimer = setTimeout(() => {
                                     incorrectBinMessage = null;
                                 }, 500);
@@ -304,20 +386,13 @@ function gameStart() {
         ctx.fillText(`Skóre: ${score} / 50`, 215, 42);
 
         if (stickmanCount >= maxP) {
-            ctx.fillStyle = "red";
-            ctx.font = "28px Comic Sans MS";
+           // ctx.fillStyle = "red";
+            //ctx.font = "28px Comic Sans MS";
            /* ctx.fillText("Koniec hry", 400, 70);=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
            gameOver();
         }
-
+             
         requestAnimationFrame(gameLoop);
-    }
-
-    function gameOver() {
-       //console.log('kkoniec');
-        gameContainer.style.display = 'none';
-        gameOverscreen.style.display = 'flex';
-        finalScoreDisplay.textContent = `Skóre: ${score}`;
     }
 
     canvas.addEventListener("click", (event) => {
@@ -335,4 +410,9 @@ function gameStart() {
 
     setTimeout(spawnStickman, 2000);
     gameLoop();
+
+
+    
+
+
 }
