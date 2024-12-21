@@ -6,28 +6,29 @@
     <title>Wayy to recycle</title>
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            flex-direction: column;
-            position: relative;
-        }
-        #gameContainer {
-            position: relative;
-            display: flex; /* Flexbox for alignment */
-            align-items: center;
-            justify-content: center;
-            width: 1100px; /* Match canvas width */
-            height: 600px; /* Match canvas height */
-            margin: 0 auto; /* Center horizontally */
-            border: 2px solid #333; /* Optional border for visualization */
-        }
-        canvas {
-            background: #f0f0f0;
-            border: 2px solid #333;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+        position: relative;
+        background-color: #85d28a; ; /* Added background color */
+    }
+    #gameContainer {
+        position: relative;
+        display: none; /* Flexbox for alignment */
+        align-items: center;
+        justify-content: center;
+        width: 1100px; /* Match canvas width */
+        height: 600px; /* Match canvas height */
+        margin: 0 auto; /* Center horizontally */
+        border: 2px solid green; /* Optional border for visualization */
+    }
+      /*canvas {
+            background: green;
+            border: 2px solid green;
+        }*/
         #gameContainer {
             position: relative;
             display: inline-block;
@@ -38,17 +39,21 @@
          z-index: 1; 
         }
 /*heeeelp-----------------------------------------------*/
+
+
+
+
+
 #image-overlay {
     position: absolute;
-    /*top: 31%;
-    left: 32.4%;*/
-    width: 43.1vw;
-    height: 59vh;
-    background-color: rgba(0, 0, 0, 0.8); 
+    width: 1104px; /* Match canvas width */
+    height: 600px; /* Match canvas height */
+
+            background-color: rgba(0, 0, 0, 0.8);
     display: none; 
     justify-content: center;
     align-items: center;
-    z-index: 10; 
+    z-index: 5; 
 }
 #overlay-image {
     max-width: 90%;
@@ -61,7 +66,7 @@
     left: 140px; 
     width: 85px; 
     height: 85px;
-    z-index: 9; 
+    z-index: 3; 
     pointer-events: none; 
     cursor: pointer;
     pointer-events: auto;
@@ -69,15 +74,15 @@
 
     }
 
-    #big-image {
+   /* #big-image {
     display: none; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
     height: auto;
-    z-index: 100; 
-}
+    z-index: 3; 
+}*/
 
 /*help-----------------------------------------------*/
 
@@ -87,16 +92,23 @@
         
 #title-screen {
     position: absolute;
-    width: 43.2vw;
-    height: 32vh;
+    width: 1104px; /* Match canvas width */
+    height: 600px; /* Match canvas height */
+        
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+  /*width: 43.2vw;
+    height: 32vh;*/
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
    /* background: url('bcg.png') no-repeat center center / cover;*/
-    z-index: 11;
+    z-index: 5; /*:):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)*/
 }
-        #start-button {
+    #start-button {
         position: absolute;
          top: 75%; 
          left: 50%;
@@ -115,7 +127,8 @@
         #start-button:hover {
          color: black;
         }
-        #koniec-button {
+
+    #koniec-button {
     position: absolute;
     top: 85%; 
     left: 50%;
@@ -128,7 +141,7 @@
     border: none; 
     outline: none; 
     cursor: pointer; 
-    z-index: 2;
+    z-index: 2; /*:):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)*/
 }
 
 #koniec-button:hover {
@@ -138,32 +151,25 @@
 /*UVOD T-----------------------------------------------*/
 /* koniec T====================================================*/
 
-#gameOver-screen {
+#GOscreen {
+    display: none;
     position: absolute;
-    top: 500;
-    left: 500;
-    width: 44vw;
-    height: 60vh;
-    background-color: rgba(0, 0, 0, 0.8); 
-    display: none; 
-    justify-content: center;
+    width: 1104px; /* Match canvas width */
+    height: 600px; /* Match canvas height */
+    display: none;
+    flex-direction: column;
     align-items: center;
-    z-index: 10; 
-}
-
-#gameOver-screen {
-    max-width: 90%;
-    max-height: 90%;
-    cursor: pointer; 
+    justify-content: center;
+    z-index: 10;
 }
 
 #restart-button {
     position: absolute;
-    top: 70%; 
+    top: 77%; 
     left: 50%;
     transform: translate(-50%, -50%); 
     font-family: 'Comic Sans MS';
-    font-size: 25px;
+    font-size: 24px;
     font-weight: bold;
     color: #393939; 
     background: none; 
@@ -171,14 +177,30 @@
     outline: none;
     cursor: pointer; 
     z-index: 2; 
+    padding: 5px 10px;
 }
 
 #restart-button:hover {
-  
     color: black; 
 }
-/* koniec T====================================================*/
-    </style>
+
+#final-score{
+            font-family: 'Comic Sans MS';
+            font-size: 30px;
+            font-weight: bold;
+            color: black;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Non-interactive */
+            z-index: 1; /*Lower z-index to avoid blocking*/
+            padding: 5px 10px;                 
+        }
+
+/* koniec T===================================================*/
+
+</style>
 </head>
 <body>
     <div id="image-overlay">
@@ -186,62 +208,24 @@
     </div>
 
     <div id="title-screen">
-        <img src="WTRmenu.png" id="start-image" alt="Overlay Image">
-        <button id="start-button">Start Game</button>
+        <img src="WTRmenu2.png" id="start-image" alt="Overlay Image">
+        <button id="start-button">Spustiť hru</button>
         <button id="koniec-button">Koniec</button>
     </div>
+
     <div id="gameContainer">
         <canvas id="gameCanvas" width="1100" height="600"></canvas>
         <img src="helpB.png" id="level-icon" alt="Level Icon">
     </div>
 
-    <div id="gameOver-screen">
-        <img src="WTRmenu.png" id="start-image" alt="Game Over Image">
-        <button id="restart-button">Hrať znovu</button>
-        <button id="koniec-button">Ukončiť hru</button>
-        
-        <div id="final-score" style="
-            position: absolute;
-    top: 45%; 
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    font-family: 'Comic Sans MS';
-    font-size: 30px;
-    font-weight: bold;
-    color: black; 
-    background: none;
-    border: none; 
-    outline: none;  
-    z-index: 2; ">
-            Skóre: 0
-        </div>
+    <div id="GOscreen">
+        <img src="WTRmenu2.png" id="start-image" alt="Overlay Image">
+        <div id="final-score">Skóre: 0</div>
+             <button id="restart-button">Hrať znovu</button>
+             <button id="koniec-button">Ukončiť hru</button>
     </div>
-    <!--
-    <div id="gameOver-screen">
-        <img src="AgoverImg.png" id="start-image" alt="Game Over Image">
-        <button id="restart-button">Hrať znovu</button>
-        <button id="gokoniec-button">Ukončiť hru</button>
-        
-        <div id="final-score" style="
-            position: absolute;
-    top: 85%; 
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    font-family: 'Comic Sans MS';
-    font-size: 24px;
-    font-weight: bold;
-    color: black; 
-    background: none;
-    border: none; 
-    outline: none;  
-    z-index: 2; ">
-            Skóre: 0
-        </div>
-    </div>
--->
-
-
 
     <script src="TWR.js"></script>
+
 </body>
 </html>
