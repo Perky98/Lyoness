@@ -29,7 +29,24 @@ document.getElementById('start-btn').addEventListener('click', function () {
 document.getElementById('exit-btn').addEventListener('click', function () {
     alert('Hra bola ukončená.');
 });
+// Toggle help image visibility
+// Toggle help image visibility
+document.getElementById('help-icon').addEventListener('click', function () {
+    const gameContainer = document.querySelector('.game-container');
+    const fullscreenImage = document.getElementById('fullscreen-image');
 
+    // Hide the game container
+   // gameContainer.style.display = 'none';
+
+    // Show the full-screen image
+    fullscreenImage.style.display = 'block';
+});
+
+// Close the full-screen image and show the game container again when clicked
+document.getElementById('fullscreen-image').addEventListener('click', function () {
+    this.style.display = 'none'; // Hide the full-screen image
+    document.querySelector('.game-container').style.display = 'block'; // Show the game container again
+});
 restartBtn.addEventListener('click', restartGame);
 
 function startGame() {
@@ -131,7 +148,13 @@ function updateScoreAndLevel() {
 
 function clearGrid() {
     const gridItems = document.querySelectorAll('.grid-item');
-    gridItems.forEach(item => item.classList.remove('active', 'clicked'));
+    gridItems.forEach(item => {
+        item.classList.remove('active', 'clicked', 'wrong'); // Скидаємо всі стилі
+        const numberOverlay = item.querySelector('.number-overlay');
+        if (numberOverlay) {
+            numberOverlay.remove(); // Видаляємо мітку з порядковим номером
+        }
+    });
 }
 
 function restartGame() {
