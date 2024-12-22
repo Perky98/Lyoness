@@ -438,7 +438,7 @@ function handleMouseUp() {
         // End the path drawing session
         startCell = null; // Clear the start cell to lock the line drawing
     } else {
-        showMessage("Path not complete!");
+       // showMessage("Path not complete!");
         paths.pop(); // Remove the last path if not complete
         drawGrid();
         drawPoints(levels);
