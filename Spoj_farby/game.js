@@ -324,6 +324,13 @@ function drawPoints() {
             cellSize / 4, 0, 2 * Math.PI
         );
         ctx.fill();
+
+        // Обведення з'єднаних точок чорним кольором
+        if (completedConnections.includes(`${point.x}-${point.y}-${point.color}`)) {
+            ctx.strokeStyle = "black"; // Чорне обведення
+            ctx.lineWidth = 2; // Товщина обведення
+            ctx.stroke();
+        }
     }
 }
 
@@ -378,6 +385,21 @@ function handleMouseMove(event) {
         (cell.x === lastCell.x && cell.y === lastCell.y)) {
         return; // Prevent movement if it's on the start or last cell
     }
+
+    // Check if the current point is the end point of the same color
+    const endPoint = levels.find(p => p.x === cell.x && p.y === cell.y && p.color === lastPath.color);
+    if (endPoint) {
+        // If the end point matches the start cell color, finalize the path
+        lastPath.path.push(cell); // Add the current cell to the path
+        drawGrid();
+        drawPoints();
+        drawPaths();
+        
+        // Block further drawing by setting startCell to null
+        startCell = null;
+        return;
+    }
+
     const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
     if (currentPoint && completedConnections.includes(`${currentPoint.x}-${currentPoint.y}-${currentPoint.color}`)) {
        // showMessage(`Ця точка кольору ${currentPoint.color} вже з'єднана!`);
@@ -405,37 +427,35 @@ function handleMouseMove(event) {
     }
 }
 function handleMouseUp() {
-    if (!startCell) return; // If there's no starting cell, exit the function
+    if (!startCell) return; // Якщо немає початкової точки, виходимо з функції
 
     const lastPath = paths[paths.length - 1];
-    if (!lastPath) return; // Ensure there's a path to work with
+    if (!lastPath) return; // Переконуємося, що є шлях для роботи
 
     const startColor = lastPath.color;
 
-    // Check if the connection is complete
+    // Перевірка, чи з'єднання завершено
     if (checkConnectionComplete(lastPath, startColor)) {
-        // Lock the path by adding it to completed connections
+        // Локалізуємо шлях, додаючи його до завершених з'єднань
         for (const cell of lastPath.path) {
             completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
         }
+        
+        // Обведення з'єднаних точок чорним кольором
         drawGrid();
-        drawPoints(levels);
+        drawPoints(); // Оновлюємо точки, щоб відобразити обведення
         drawPaths();
 
-        // Show a message indicating successful connection
-       // showMessage(`Connected ${startColor} dots!`);
-
-        // End the path drawing session
-        startCell = null; // Clear the start cell to lock the line drawing
+        // Очищення початкової точки для завершення малювання
+        startCell = null; // Очищуємо початкову точку
     } else {
-       // showMessage("Path not complete!");
-        paths.pop(); // Remove the last path if not complete
+        paths.pop(); // Видаляємо останній шлях, якщо не завершено
         drawGrid();
         drawPoints(levels);
         drawPaths();
     }
 
-    // Check for win condition
+    // Перевірка на умову виграшу
     if (checkWin()) {
         level++;
         if (level < 5) {
@@ -516,7 +536,6 @@ function drawPaths() {
         ctx.stroke();
     }
 }
-
 function checkWin() {
     return levels.every(point => paths.some(path => {
         return path.color === point.color && path.path.some(p => p.x === point.x && p.y === point.y);
