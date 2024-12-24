@@ -397,6 +397,18 @@ function handleMouseMove(event) {
         
         // Block further drawing by setting startCell to null
         startCell = null;
+
+        // Перевірка на умову виграшу після завершення з'єднання
+        if (checkWin()) {
+            level++;
+            if (level < 5) {
+                initGame(); // Initialize the next level
+            } else {
+                showCompletionMessage(); // Show completion message if all levels are done
+                clearInterval(timerInterval);
+            }
+        }
+
         return;
     }
 
