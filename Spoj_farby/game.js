@@ -131,8 +131,8 @@ const randomLevels3 = [
         { y: 2, x: 1, color: "#784EEE" },
         { y: 2, x: 3, color: "#1E9F25" },
         { y: 1, x: 2, color: "#7DD0F6" },
-        { y: 1, x: 3, color: "#F6E87D" },
-        { y: 0, x: 3, color: "#F6E87D" },
+        { y: 3, x: 1, color: "#F6E87D" },
+        { y: 3, x: 0, color: "#F6E87D" },
         { y: 3, x: 3, color: "#7DD0F6" } 
     ],
     [
@@ -158,7 +158,7 @@ const randomLevels4 = [
         { y: 0, x: 2, color: "#7DD0F6" },
         { y: 4, x: 0, color: "#7DD0F6" },
         { y: 3, x: 0, color: "#784EEE" }, 
-        { y: 0, x: 0, color: "#784EEE" } 
+        { y: 0, x: 1, color: "#784EEE" } 
     ],
      [
         { y: 0, x: 4, color: "#4EEE90" },
