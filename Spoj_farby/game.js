@@ -23,16 +23,12 @@ document.getElementById("startButton").addEventListener("click", function() {
 
 document.getElementById('level-icon').addEventListener('click', function () {
     const imageModal = document.getElementById('imageModal');
-    imageModal.style.display = 'block'; // Відкриваємо модальне вікно
+    imageModal.style.display = 'block'; 
 });
 
-/*document.getElementById('closeModal').addEventListener('click', function () {
-    const imageModal = document.getElementById('imageModal');
-    imageModal.style.display = 'none'; // Закриваємо модальне вікно
-}); */
 document.getElementById('modalImage').addEventListener('click', function () {
     const imageModal = document.getElementById('imageModal');
-    imageModal.style.display = 'none'; // Закриваємо модальне вікно
+    imageModal.style.display = 'none'; 
 }); 
 const fixedLevel = [
     [
@@ -262,7 +258,7 @@ function initGame() {
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTime, 1000);
 
-    gridSize = 2 + level; // e.g., 2x2 for level 0, 3x3 for level 1, etc.
+    gridSize = 2 + level; 
     cellSize = canvas.width / gridSize;
 
     if (level === 0) {
@@ -319,10 +315,9 @@ function drawPoints() {
         );
         ctx.fill();
 
-        // Обведення з'єднаних точок чорним кольором
         if (completedConnections.includes(`${point.x}-${point.y}-${point.color}`)) {
-            ctx.strokeStyle = "black"; // Чорне обведення
-            ctx.lineWidth = 2; // Товщина обведення
+            ctx.strokeStyle = "black"; 
+            ctx.lineWidth = 2; 
             ctx.stroke();
         }
     }
@@ -338,7 +333,6 @@ function handleMouseDown(event) {
     if (startCell) {
         const connectionKey = `${startCell.x}-${startCell.y}-${startCell.color}`;
         if (completedConnections.includes(connectionKey)) {
-            // Remove the connection from completedConnections array
             completedConnections = completedConnections.filter(key => key !== connectionKey);
 
         
@@ -358,47 +352,42 @@ function handleMouseDown(event) {
     }
 }
 function handleMouseMove(event) {
-    if (!startCell) return; // If no starting cell, exit the function
+    if (!startCell) return; 
 
     const cell = getCell(event.offsetX, event.offsetY);
     if (paths.length > 0 && completedConnections.includes(`${startCell.x}-${startCell.y}-${startCell.color}`)) {
-        return; // Якщо з'єднання завершено, не дозволяйте рухати курсор
+        return; 
     }
-    // Ensure there is at least one path before proceeding
-    if (paths.length === 0) return; // Exit if there are no paths
+    if (paths.length === 0) return; 
 
-    const lastPath = paths[paths.length - 1]; // Get the last path
+    const lastPath = paths[paths.length - 1]; 
 
-    // Ensure lastPath is defined and has a path property
     if (!lastPath || !lastPath.path) return;
 
-    const lastCell = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
+    const lastCell = lastPath.path[lastPath.path.length - 1]; 
 
-    // Check if the current cell is the same as the start cell or the last cell
     if ((cell.x === startCell.x && cell.y === startCell.y) || 
         (cell.x === lastCell.x && cell.y === lastCell.y)) {
-        return; // Prevent movement if it's on the start or last cell
+        return; 
     }
 
-    // Check if the current point is the end point of the same color
     const endPoint = levels.find(p => p.x === cell.x && p.y === cell.y && p.color === lastPath.color);
     if (endPoint) {
-        // If the end point matches the start cell color, finalize the path
-        lastPath.path.push(cell); // Add the current cell to the path
+        lastPath.path.push(cell); 
         drawGrid();
         drawPoints();
         drawPaths();
         
-        // Block further drawing by setting startCell to null
         startCell = null;
 
-        // Перевірка на умову виграшу після завершення з'єднання
         if (checkWin()) {
             level++;
+         
             if (level < 5) {
-                initGame(); // Initialize the next level
+               
+                setTimeout(initGame, 500);
             } else {
-                showCompletionMessage(); // Show completion message if all levels are done
+                showCompletionMessage(); 
                 clearInterval(timerInterval);
             }
         }
@@ -408,96 +397,82 @@ function handleMouseMove(event) {
 
     const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
     if (currentPoint && completedConnections.includes(`${currentPoint.x}-${currentPoint.y}-${currentPoint.color}`)) {
-       // showMessage(`Ця точка кольору ${currentPoint.color} вже з'єднана!`);
-        startCell = null; // Зупинити малювання
-        return; // Запобігти подальшому малюванню
+        startCell = null; 
+        return; 
     }
     if ((lastCell.x !== cell.x || lastCell.y !== cell.y) && isValidMove(lastCell, cell)) {
-        // Check if the last path's color matches the current cell's color
         const currentPoint = levels.find(p => p.x === cell.x && p.y === cell.y);
         if (currentPoint && lastPath.color === currentPoint.color) {
-            // Allow movement if the colors match
         } else if (currentPoint) {
-            // Block movement if the colors do not match
             return; 
         }
 
         if (isIntersecting(cell, lastPath)) {
-            return; // Prevent intersection
+            return; 
         }
 
-        lastPath.path.push(cell); // Add the current cell to the path
+        lastPath.path.push(cell); 
         drawGrid();
         drawPoints();
         drawPaths();
     }
 }
 function handleMouseUp() {
-    if (!startCell) return; // Якщо немає початкової точки, виходимо з функції
+    if (!startCell) return; 
 
     const lastPath = paths[paths.length - 1];
-    if (!lastPath) return; // Переконуємося, що є шлях для роботи
+    if (!lastPath) return; 
 
     const startColor = lastPath.color;
 
-    // Перевірка, чи з'єднання завершено
     if (checkConnectionComplete(lastPath, startColor)) {
-        // Локалізуємо шлях, додаючи його до завершених з'єднань
         for (const cell of lastPath.path) {
             completedConnections.push(`${cell.x}-${cell.y}-${startColor}`);
         }
         
-        // Обведення з'єднаних точок чорним кольором
         drawGrid();
-        drawPoints(); // Оновлюємо точки, щоб відобразити обведення
+        drawPoints(); 
         drawPaths();
 
-        // Очищення початкової точки для завершення малювання
-        startCell = null; // Очищуємо початкову точку
+        startCell = null; 
     } else {
-        paths.pop(); // Видаляємо останній шлях, якщо не завершено
+        paths.pop(); 
         drawGrid();
         drawPoints(levels);
         drawPaths();
     }
 
-    // Перевірка на умову виграшу
     if (checkWin()) {
         level++;
         if (level < 5) {
-            initGame(); // Initialize the next level
+            initGame(); 
         } else {
-            showCompletionMessage(); // Show completion message if all levels are done
+            showCompletionMessage();
             clearInterval(timerInterval);
         }
     }
 }
 function isValidMove(from, to) {
-    // Check if the move is adjacent
     const isAdjacent = Math.abs(from.x - to.x) + Math.abs(from.y - to.y) === 1;
 
-    // Check if the target cell is within bounds
     const isInBounds = to.x >= 0 && to.x < gridSize && to.y >= 0 && to.y < gridSize;
 
-    // Check if there is at least one path to check against
     if (paths.length > 0) {
-        const lastPath = paths[paths.length - 1]; // Get the last path
-        const secondPoint = lastPath.path[lastPath.path.length - 1]; // Get the last cell in the path
+        const lastPath = paths[paths.length - 1]; 
+        const secondPoint = lastPath.path[lastPath.path.length - 1]; 
 
-        // Check if the target cell is the second point of the same color
         const currentPoint = levels.find(p => p.x === to.x && p.y === to.y);
         if (currentPoint && currentPoint.color === lastPath.color && 
             (to.x === secondPoint.x && to.y === secondPoint.y)) {
-            return false; // Prevent moving to the second point of the same color
+            return false; 
         }
-        // Check if the current point is the start cell and has the same color
         if (currentPoint && startCell && startCell.color === currentPoint.color && 
             (to.x === startCell.x && to.y === startCell.y)) {
-            return false; // Prevent moving back to the start cell
+            return false; 
         }
     }
 
-    return isAdjacent && isInBounds; // Return true if the move is valid
+    return isAdjacent && isInBounds; 
 }
 
 
