@@ -14,32 +14,26 @@ const levelDisplay = document.getElementById("levelDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
 const messageDisplay = document.getElementById("messageDisplay");
 document.getElementById("startButton").addEventListener("click", function() { 
-    document.getElementById("startScreen").style.display = "none"; // Hide the start screen 
-    document.querySelector(".info").style.display = "flex"; // Show game info 
-    document.getElementById("gameCanvas").style.display = "block"; // Show the canvas 
-    document.getElementById("level-icon").style.display = "block"; // Show the help image
-    initGame(); // Initialize the game 
-});
-// Get the modal
-const modal = document.getElementById("imageModal");
-const modalImage = document.getElementById("modalImage");
-const closeModal = document.getElementById("closeModal");
-
-// When the user clicks on helpB.png, open the modal
-document.getElementById("level-icon").addEventListener("click", function() {
-    modal.style.display = "block";
+    document.getElementById("startScreen").style.display = "none"; 
+    document.querySelector(".info").style.display = "flex"; 
+    document.getElementById("gameCanvas").style.display = "block"; 
+    document.getElementById("level-icon").style.display = "block"; 
+    initGame(); 
 });
 
-// When the user clicks on <span> (x), close the modal
-closeModal.addEventListener("click", function() {
-    modal.style.display = "none";
+document.getElementById('level-icon').addEventListener('click', function () {
+    const imageModal = document.getElementById('imageModal');
+    imageModal.style.display = 'block'; // Відкриваємо модальне вікно
 });
 
-// When the user clicks on the modal image, close the modal
-modalImage.addEventListener("click", function() {
-    modal.style.display = "none";
-});
-
+/*document.getElementById('closeModal').addEventListener('click', function () {
+    const imageModal = document.getElementById('imageModal');
+    imageModal.style.display = 'none'; // Закриваємо модальне вікно
+}); */
+document.getElementById('modalImage').addEventListener('click', function () {
+    const imageModal = document.getElementById('imageModal');
+    imageModal.style.display = 'none'; // Закриваємо модальне вікно
+}); 
 const fixedLevel = [
     [
         { y: 0, x: 0, color: "#784EEE" },
