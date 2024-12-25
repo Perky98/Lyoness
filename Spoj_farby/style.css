@@ -19,7 +19,6 @@ top: 97px;
 left: 910px; 
 width: 85px; 
 height: 85px;
-/*z-index: 9; */
 pointer-events: none; 
 cursor: pointer;
 pointer-events: auto;
@@ -29,15 +28,15 @@ pointer-events: auto;
 #startButton {
     padding: 10px 20px;
     font-size: 2.2em;
-    background-color: #4CAF50; /* Зелений фон */
-    color: white; /* Білий текст */
+    background-color: #4CAF50; 
+    color: white; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 #startButton:hover {
-    background-color: #45a049; /* Темніший зелений при наведенні */
+    background-color: #45a049; 
 }
 .yellow {
     color: yellow;
@@ -75,12 +74,12 @@ pointer-events: auto;
     color: #555;
 }
 h1 {
-    font-size: 3em; /* Example font size */
+    font-size: 3em; 
    
 }
 
 h1 span {
-    letter-spacing: -19px; /* Adjust this value to make letters tighter */
+    letter-spacing: -19px; 
 }
 .game-container {
     text-align: center;
@@ -130,21 +129,9 @@ h1 {
     margin-bottom: 10px;
 }
 #fullscreen-image {
-    /* display: block; /* Додано для центрування */
-     /*margin: 0 auto; /* Центрування зображення */
-    /* max-width: none; /* Вимкнення обмеження ширини */
-   /*  max-height: none; /* Вимкнення обмеження висоти */
-    /* position: absolute; 
-    /*max-width: 800px;  
-    /* left: 670px; 
-   /*  transform: translate(-50%, -50%); /* Центрування зображення */
-     z-index: 999; /* Залишити, щоб зображення було поверх інших елементів */
+     z-index: 999; 
  }
-/*canvas {
-   /* border: 2px solid #333;
-    border-radius: 10px;
-    margin-top: 10px;
-}*/
+
 
 .message {
     display: none;
