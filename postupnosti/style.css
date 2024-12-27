@@ -23,7 +23,7 @@ pointer-events: auto;
 
 
 }
-/* Стартовый экран */
+
 #start-screen {
     display: flex;
     flex-direction: column;
