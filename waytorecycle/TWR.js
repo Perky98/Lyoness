@@ -1,4 +1,3 @@
-
 const imageOverlay = document.getElementById('image-overlay');
 const overlayImage = document.getElementById('overlay-image');
 const titleScreen = document.getElementById('title-screen');
@@ -19,9 +18,18 @@ const arrow = new Image();
 const gStickman = new Image();
 const yStickman = new Image();
 const bStickman = new Image();
+const blStickman = new Image();
 
 let imagesLoaded = 0;
 const totalImages = 5;
+
+const stickmen = [];
+const crossroads = [
+    { x: 325, y: 220, radius: 55, arrowDirection: "down" },
+    { x: 600, y: 390, radius: 55, arrowDirection: "down" },
+    { x: 800, y: 390, radius: 55, arrowDirection: "up" }
+];
+
 
 
 /*FIXFIXFIX=========FIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIXFIX
@@ -55,16 +63,6 @@ gameOverscreen.appendChild(scoreLabel);
 
 
 
-
-
-
-
-
-const stickmen = [];
-const crossroads = [
-    { x: 325, y: 220, radius: 55, arrowDirection: "down" },
-    { x: 600, y: 390, radius: 55, arrowDirection: "down" }
-];
 
 
 
@@ -153,7 +151,7 @@ resetButton.style.fontSize = '20px';
 resetButton.style.borderRadius = '11px';
 gameContainer.appendChild(resetButton);
 
-resetButton.addEventListener('click', gameStart);//=-----------------RESTART B
+resetButton.addEventListener('click', restartGame);//=-----------------RESTART B
 
 /*no */
 
@@ -197,17 +195,19 @@ levelIcon.addEventListener('click', () => {
 
 overlayImage.addEventListener('click', () => {
     imageOverlay.style.display = 'none'; 
-    gameStart();
+    //gameStart();
+    restartGame();
 });
 
 //---help
 //--------------------------------------------------gui
 
-backgroundImage.src = "TTRmapa1.jpg";
+backgroundImage.src = "TTRmapa1M.jpg";
 arrow.src = "arrow.png";
 gStickman.src = "panak1g.png";
 yStickman.src = "panak2y.png";
 bStickman.src = "panak3b.png";
+blStickman.src = "panak4bl.png";
 
 function checkImagesLoaded() {
     imagesLoaded++;
@@ -217,24 +217,28 @@ function checkImagesLoaded() {
 }
 
 function gameStart() {
-    const colors = ["g", "y", "b"];
+    const colors = ["g", "y", "b","bl"];
     const stickmanImages = {
         g: gStickman,
         y: yStickman,
-        b: bStickman
+        b: bStickman,
+        bl: blStickman
     };
 
     const trashBins = {
         g: { x: 577, y: 170 },
-        y: { x: 755, y: 345 },
-        b: { x: 715, y: 460 }
+        y: { x: 785, y: 160 },
+        b: { x: 715, y: 460 },
+        bl: { x: 1025, y: 340 } 
     };
 
     const stickmen = [];
     const crossroads = [
         { x: 325, y: 220, radius: 55, arrowDirection: "down" },
-        { x: 600, y: 390, radius: 55, arrowDirection: "down" }
+        { x: 600, y: 390, radius: 55, arrowDirection: "down" },
+        { x: 800, y: 390, radius: 55, arrowDirection: "up" }
     ];
+    
 
     const speed = 1;
     let stickmanCount = 0;
@@ -297,7 +301,7 @@ function gameStart() {
                 if (Math.abs(stickman.x - stickman.targetX) < 2 && Math.abs(stickman.y - stickman.targetY) < 2) {
                     stickman.reached = true;
 
-                    if (stickman.targetX === 295 && stickman.targetY === 170) {
+                    if (stickman.currentCrossroad === 0) {
                         if (crossroads[0].arrowDirection === "down") {
                             stickman.targetX = 580;
                             stickman.targetY = 340;
@@ -307,16 +311,27 @@ function gameStart() {
                             stickman.targetY = trashBins.g.y;
                             stickman.finalTargetColor = "g";
                         }
-                    } else if (stickman.targetX === 580 && stickman.targetY === 340) {
+                    } else if (stickman.currentCrossroad === 1) {
                         if (crossroads[1].arrowDirection === "down") {
                             stickman.targetX = trashBins.b.x;
                             stickman.targetY = trashBins.b.y;
                             stickman.finalTargetColor = "b";
                         } else if (crossroads[1].arrowDirection === "straight") {
-                            stickman.targetX = trashBins.y.x;
-                            stickman.targetY = trashBins.y.y;
-                            stickman.finalTargetColor = "y";
+                            stickman.targetX = crossroads[2].x - 10;
+                            stickman.targetY = crossroads[2].y - 50;
+                            stickman.currentCrossroad = 2;
                         }
+                    } else if (stickman.currentCrossroad === 2) {
+                        if (crossroads[2].arrowDirection === "up") {
+                            stickman.targetX = trashBins.y.x;
+                            stickman.targetY = trashBins.y.y; // Adjust Y offset
+                            stickman.finalTargetColor = "y";
+                        } else if (crossroads[2].arrowDirection === "straight") {
+                            stickman.targetX = trashBins.bl.x;
+                            stickman.targetY = trashBins.bl.y; // Adjust Y offset
+                            stickman.finalTargetColor = "bl";
+                        }
+                       // stickman.currentCrossroad = 3;
                     }
 
                     for (const color in trashBins) {
@@ -326,15 +341,13 @@ function gameStart() {
                             Math.abs(stickman.y - trashBin.y) < 5
                         ) {
                             if (color === stickman.color) {
-                                if(stickmanCount <= maxP) score++;
+                                score++;
                                 correctBinMessage = { text: "spravny kos", x: stickman.x, y: stickman.y };
-                                //clearTimeout(correctBinTimer);
                                 correctBinTimer = setTimeout(() => {
                                     correctBinMessage = null;
                                 }, 500);
                             } else {
                                 incorrectBinMessage = { text: "nespravny kos", x: stickman.x, y: stickman.y };
-                                //clearTimeout(incorrectBinTimer);
                                 incorrectBinTimer = setTimeout(() => {
                                     incorrectBinMessage = null;
                                 }, 500);
@@ -363,11 +376,17 @@ function gameStart() {
             ctx.save();
             ctx.translate(crossroad.x, crossroad.y);
             if (crossroad.arrowDirection === "down") {
-                ctx.rotate(Math.PI / 2);
+                ctx.rotate(Math.PI / 2); // 90 degrees down
+            } else if (crossroad.arrowDirection === "up") {
+                ctx.rotate(-Math.PI / 2); // 90 degrees up
+            } else if (crossroad.arrowDirection === "straight") {
+                // No rotation for straight
             }
             ctx.drawImage(arrow, -20, -20, 40, 40);
             ctx.restore();
         });
+
+
 
         if (correctBinMessage) {
             ctx.fillStyle = "yellow";
@@ -386,27 +405,36 @@ function gameStart() {
         ctx.fillText(`Skóre: ${score} / 50`, 215, 42);
 
         if (stickmanCount >= maxP) {
-           // ctx.fillStyle = "red";
-            //ctx.font = "28px Comic Sans MS";
-           /* ctx.fillText("Koniec hry", 400, 70);=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
            gameOver();
         }
              
         requestAnimationFrame(gameLoop);
     }
 
-    canvas.addEventListener("click", (event) => {
-        const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+ canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
 
-        crossroads.forEach(crossroad => {
-            const distance = Math.sqrt((clickX - crossroad.x) ** 2 + (clickY - crossroad.y) ** 2);
-            if (distance < crossroad.radius) {
-                crossroad.arrowDirection = crossroad.arrowDirection === "straight" ? "down" : "straight";
+    crossroads.forEach((crossroad, index) => {
+        const distance = Math.sqrt((clickX - crossroad.x) ** 2 + (clickY - crossroad.y) ** 2);
+        if (distance < crossroad.radius) {
+            if (index === 0 || index === 1) { // Crossroads 1 and 2
+                if (crossroad.arrowDirection === "straight") {
+                    crossroad.arrowDirection = "down";
+                } else {
+                    crossroad.arrowDirection = "straight";
+                }
+            } else if (index === 2) { // Crossroad 3
+                if (crossroad.arrowDirection === "up") {
+                    crossroad.arrowDirection = "straight";
+                } else {
+                    crossroad.arrowDirection = "up";
+                }
             }
-        });
+        }
     });
+});
 
     setTimeout(spawnStickman, 2000);
     gameLoop();
