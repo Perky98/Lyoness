@@ -520,3 +520,38 @@ footer {
 .full-width {
     width: 100%;
 }
+
+
+/* Juraj CSS*/ 
+.box-content {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1636px;
+    padding-left: 1.125em;
+    padding-right: 1.125em;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.img-about-us {
+    width: 650px;
+    height: auto;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    border-radius: 1em;
+}
+
+.about-us-text {
+    margin-bottom: 1em;
+    font-size: 18px !important;
+}
+
+.about-us-h1 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 60px !important;
+}
