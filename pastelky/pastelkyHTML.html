@@ -6,25 +6,34 @@
     <title>Hra pastelky</title>
     <style>
         body {
-            font-family: 'Comic Sans MS';
             display: flex;
-            justify-content: center;
-            align-items: center;
+        align-items: center;
+        justify-content: center;
+
+
+            font-family: 'Comic Sans MS';
             height: 100vh;
             margin: 0;
-            background-color: white;
+            background-color: #F7D7D7;
         }
 
-               #title-screen {
-            position: absolute;
-            
-            display: block;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: url('bcg.png') no-repeat center center / cover; 
-            z-index: 1;
-        }
+         
+
+        #title-screen 
+        {
+    position: relative;
+            width: 900px;
+            height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('bcg.png') no-repeat center center / cover;
+    z-index: 1;
+}
+
+
+
 
        
         #start-button {
@@ -122,30 +131,16 @@
 
 
 
-#title-screen {
-    
-
-    position: relative;
-            width: 900px;
-            height: 500px;
-
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: url('bcg.png') no-repeat center center / cover;
-    z-index: 1;
-}
-
 #start-image {
     width: 100%; 
-    /*height: auto;*/
+    height: auto;
     z-index: 1; 
 }
         #game-container {
-            display: none; 
+            display: none;
             position: relative;
+            align-items: center;
+            justify-content: center;
             width: 900px;
             height: 500px;
             background: url('bcg.png') no-repeat center center / cover; 
