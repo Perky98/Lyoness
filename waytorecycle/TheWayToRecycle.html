@@ -13,32 +13,32 @@
         margin: 0;
         flex-direction: column;
         position: relative;
-        background-color: #85d28a; ; /* Added background color */
+        background-color: #85d28a; 
     }
     #gameContainer {
         position: relative;
-        display: none; /* Flexbox for alignment */
+        display: inline-block; 
         align-items: center;
         justify-content: center;
-        width: 1100px; /* Match canvas width */
-        height: 600px; /* Match canvas height */
-        margin: 0 auto; /* Center horizontally */
-        border: 2px solid green; /* Optional border for visualization */
+        width: 1100px; 
+        height: 600px; 
+        margin: 0 auto; 
+        border: 2px solid green; 
     }
       /*canvas {
             background: green;
             border: 2px solid green;
         }*/
-        #gameContainer {
+        /*#gameContainer {
             position: relative;
             display: inline-block;
-        }
+        }*/
         #start-image {
             width: 100%; 
             height: auto;
          z-index: 1; 
         }
-/*heeeelp-----------------------------------------------*/
+/*help-----------------------------------------------*/
 
 
 
@@ -46,8 +46,8 @@
 
 #image-overlay {
     position: absolute;
-    width: 1104px; /* Match canvas width */
-    height: 600px; /* Match canvas height */
+    width: 1104px; 
+    height: 600px; 
 
             background-color: rgba(0, 0, 0, 0.8);
     display: none; 
@@ -92,8 +92,8 @@
         
 #title-screen {
     position: absolute;
-    width: 1104px; /* Match canvas width */
-    height: 600px; /* Match canvas height */
+    width: 1104px; 
+    height: 600px; 
         
     display: flex;
     flex-direction: column;
@@ -154,8 +154,8 @@
 #GOscreen {
     display: none;
     position: absolute;
-    width: 1104px; /* Match canvas width */
-    height: 600px; /* Match canvas height */
+    width: 1104px; 
+    height: 600px; 
     display: none;
     flex-direction: column;
     align-items: center;
@@ -193,8 +193,8 @@
             top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
-            pointer-events: none; /* Non-interactive */
-            z-index: 1; /*Lower z-index to avoid blocking*/
+            pointer-events: none; 
+            z-index: 1; 
             padding: 5px 10px;                 
         }
 
@@ -220,7 +220,7 @@
 
     <div id="GOscreen">
         <img src="WTRmenu2.png" id="start-image" alt="Overlay Image">
-       <!--<div id="final-score">Skóre: 0</div>-->
+        <div id="final-score">Skóre: 0</div>
              <button id="restart-button">Hrať znovu</button>
              <button id="koniec-button">Ukončiť hru</button>
     </div>
