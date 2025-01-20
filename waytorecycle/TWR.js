@@ -324,11 +324,11 @@ function gameStart() {
                     } else if (stickman.currentCrossroad === 2) {
                         if (crossroads[2].arrowDirection === "up") {
                             stickman.targetX = trashBins.y.x;
-                            stickman.targetY = trashBins.y.y; // Adjust Y offset
+                            stickman.targetY = trashBins.y.y; 
                             stickman.finalTargetColor = "y";
                         } else if (crossroads[2].arrowDirection === "straight") {
                             stickman.targetX = trashBins.bl.x;
-                            stickman.targetY = trashBins.bl.y; // Adjust Y offset
+                            stickman.targetY = trashBins.bl.y;
                             stickman.finalTargetColor = "bl";
                         }
                        // stickman.currentCrossroad = 3;
@@ -376,9 +376,9 @@ function gameStart() {
             ctx.save();
             ctx.translate(crossroad.x, crossroad.y);
             if (crossroad.arrowDirection === "down") {
-                ctx.rotate(Math.PI / 2); // 90 degrees down
+                ctx.rotate(Math.PI / 2); // 90 dole
             } else if (crossroad.arrowDirection === "up") {
-                ctx.rotate(-Math.PI / 2); // 90 degrees up
+                ctx.rotate(-Math.PI / 2); // 90 hore
             } else if (crossroad.arrowDirection === "straight") {
                 // No rotation for straight
             }
@@ -419,13 +419,13 @@ function gameStart() {
     crossroads.forEach((crossroad, index) => {
         const distance = Math.sqrt((clickX - crossroad.x) ** 2 + (clickY - crossroad.y) ** 2);
         if (distance < crossroad.radius) {
-            if (index === 0 || index === 1) { // Crossroads 1 and 2
+            if (index === 0 || index === 1) { // Crossroads 1a  2
                 if (crossroad.arrowDirection === "straight") {
                     crossroad.arrowDirection = "down";
                 } else {
                     crossroad.arrowDirection = "straight";
                 }
-            } else if (index === 2) { // Crossroad 3
+            } else if (index === 2) { // 3
                 if (crossroad.arrowDirection === "up") {
                     crossroad.arrowDirection = "straight";
                 } else {
